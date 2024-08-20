@@ -306,11 +306,11 @@ const ProductDetailsPage = ({ product }) => {
       <AccordionItem title="Product Description" >
         <div>
           <h4 className={` font-semibold`}>Manufacture, Care and Fit</h4>
-          <p>Men's White & Blue Partner In Crime Tie & Dye Oversized T-shirt</p>
+          <p>Mens White & Blue Partner In Crime Tie & Dye Oversized T-shirt</p>
           <p><span className={` font-semibold`}>Country of Origin</span> - India</p>
           <p><span className={` font-semibold`}>Manufactured By</span> - Bewakoof Brands Pvt Ltd, Sairaj logistic hub #A5, BMC pipeline road, Opposite all saints high school, Amane, Bhiwandi, Thane, Maharashtra 421302</p>
           <p><span className={` font-semibold`}>Packed By</span> - Bewakoof Brands Pvt Ltd, Sairaj logistic hub #A5, BMC pipeline road, Opposite all saints high school, Amane, Bhiwandi, Thane, Maharashtra 421302</p>
-          <p><span className={` font-semibold`}>Commodity</span> - Men's T-Shirt</p>
+          <p><span className={` font-semibold`}>Commodity</span> - Mens T-Shirt</p>
         </div>
       </AccordionItem>
       <AccordionItem title="Shipping Info">

@@ -15,7 +15,7 @@ const HomePage = () => {
   return (
     <div className='container mt-[850px] mb-[150px]'>
       <Ticker />
-      <h1>Men's Clothing Store</h1>
+      <h1>Mens Clothing Store</h1>
       <FadeInCards cards={cardContents} />
      
     </div>
