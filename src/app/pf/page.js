@@ -1,8 +1,8 @@
 // pages/index.js
 import React from 'react';
-import ParallaxSection from '../_components/ParallaxSection';
+
 import Ticker from '../_components/Ticker';
-import ProductCards from '../_components/ParallaxSection';
+
 import FadeInCards from '../_components/ParallaxSection';
 
 const HomePage = () => {

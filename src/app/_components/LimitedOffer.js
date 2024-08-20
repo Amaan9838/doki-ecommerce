@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { motion, inView } from 'framer-motion';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function LimitedOffer() {
   // Animation variants for fade-in-left effect
@@ -18,9 +19,11 @@ export default function LimitedOffer() {
   return (
     <section className="bg-[#e7e5e5] flex flex-col md:flex-row items-center justify-center px-4 md:px-24 md:mt-24 mt-16 md:mx-8 rounded-3xl">
       <div className="md:w-1/2 flex justify-center md:justify-start">
-        <img 
+        <Image 
           src="/promo.png" 
           alt="Fashion Promo" 
+          width={400}
+          height={300}
           className="rounded-lg max-w-full h-auto"
         />
       </div>
