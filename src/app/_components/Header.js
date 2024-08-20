@@ -81,8 +81,7 @@ setIsMenuOpen(false);
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6 justify-center items-center">
-            <div className="relative" onMouseEnter={() => setIsOpenCategory(true)}
-              onMouseLeave={() => setIsOpenCategory(false)} >
+            <div className="relative" >
               <div   
               className="flex items-center gap-1 hover:text-gray-900 hover:rounded-xl hover:bg-gray-200 px-2 py-2">
                 <button
@@ -104,22 +103,22 @@ setIsMenuOpen(false);
                   <div className="flex justify-between items-start">
                     <div className="w-1/3 px-6">
                       <img
-                        src="/sweater.jpg"
+                        src="/model.png"
                         alt="Accessories"
-                        className="w-full h-[400px] object-cover rounded-lg"
+                        className="w-full h-[500px] object-cover rounded-lg"
                       />
                     </div>
-                    <div className="w-[100%] grid grid-cols-1 ">
+                    <div className="w-[100%] grid grid-cols-2 ">
                       {/* Category Links */}
                       <div>
-                        <h4 className="font-black text-4xl text-gray-900 px-12">Trending</h4>
+                        <h4 className="font-black text-4xl text-gray-900 px-12 my-2.5">Trending</h4>
                         <ul className='flex flex-row '>
                           {/* {categoryList.map((category, index)=>(
                           <li key={index}><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
 
                           ))} */}
                           <div>                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">BEST SELLERS</a></li>
-                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">ICON X ROSS CAMPBELL</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">SUITS</a></li>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">PANTS</a></li>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">DENIM JEANS</a></li>
                           </div>
@@ -153,12 +152,12 @@ setIsMenuOpen(false);
                         </ul>
                       </div> */}
                       <div>
-                        <h4 className="font-medium text-gray-900">Brands</h4>
+                        <h4 className="font-black text-4xl text-gray-900 my-2.5">Buy without ocassion</h4>
                         <ul>
-                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Re-Arranged</a></li>
-                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Counterfeit</a></li>
-                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Full Nelson</a></li>
-                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">My Way</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Casual Wears</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Dresses</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Suits</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Other Accessories</a></li>
                         </ul>
                       </div>
                     </div>
@@ -290,10 +289,10 @@ setIsMenuOpen(false);
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <a href="/categories" className="text-gray-700 text-sm py-1">Sneakers</a>
-                    <a href="/categories" className="text-gray-700 text-sm py-1">Boots</a>
-                    <a href="/categories" className="text-gray-700 text-sm py-1">Sandals</a>
-                    <a href="/categories" className="text-gray-700 text-sm py-1">Socks</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Denim Jeans</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Casual Shirts</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Suits</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Jackets</a>
                   </motion.div>
                 )}
               </div>

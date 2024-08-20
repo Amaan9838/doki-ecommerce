@@ -13,19 +13,21 @@ export default function Slideshow() {
   const sliderRef = useRef(null);
 
   const settings = {
-    lazyLoad: true,
+    
     fade:true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 2500,
-    waitForAnimate: true,
-    swipeToSlide: true,
     dots: true,
+    draggable: true,
+    focusOnSelect: false,
+    touchMove: true,
+    arrows:false,
     appendDots: dots => (
-      <div style={{ bottom: '30px' }}>
+      <div style={{ bottom: '-30px', zIndex:"100" }}>
         <ul style={{ margin: "0px" }}> {dots} </ul>
       </div>
     )
