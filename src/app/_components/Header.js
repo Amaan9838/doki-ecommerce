@@ -87,7 +87,7 @@ setCategoryList(resp.data.data);
                         <h4 className="font-medium text-gray-900">Trending</h4>
                         <ul>
                           {categoryList.map((category, index)=>(
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
+                          <li key={index}><a href="#" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
 
                           ))}
                           {/* <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Boots</a></li>
