@@ -1,5 +1,7 @@
 // import React from 'react';
 
+import Link from "next/link";
+
 const SignIn = () => {
   return (
     <div className=" flex justify-center">
@@ -8,12 +10,12 @@ const SignIn = () => {
           <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
           <p className="mt-2 text-sm font-medium text-gray-600 dark:text-neutral-400">
             Don't have an account yet?
-            <a
+            <Link
               className="text-blue-600 decoration-2 ml-1 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-              href=""
+              href={"/SignUp"}
             >
               Sign up here
-            </a>
+            </Link>
           </p>
         </div>
 
@@ -98,7 +100,7 @@ const SignIn = () => {
                   </label>
                   <a
                     className="inline-flex items-center gap-x-1 font-semibold text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline dark:text-blue-500"
-                    href="../examples/html/recover-account.html"
+                    href="#"
                   >
                     Forgot password?
                   </a>

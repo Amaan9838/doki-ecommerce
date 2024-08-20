@@ -6,6 +6,7 @@ import Visa from "./logos/Visa";
 import IDeal from "./logos/IDeal";
 import MasterCard from "./logos/MasterCard";
 import Bank  from "./logos/Bank";
+import Image from "next/image";
 
 
 export default function Footer() {
@@ -15,13 +16,14 @@ export default function Footer() {
         
         {/* About Us Section */}
         <div>
+          <Image src={'/Doki_lg_bg_white.png'} width={150} height={50} className="pb-4"/>
           <h2 className="text-lg font-bold mb-4">About us</h2>
           <p className="text-sm mb-4">
-            Established in 2018, ICON is all about standing out from the crowd
+            Established in 2024, DOKI is all about standing out from the crowd
             and staying unique.
           </p>
           <p className="text-sm mb-4">
-            In just a few years, ICON is now part of the American streetwear
+             DOKI is now part of the American streetwear
             scene and a leading global destination for the latest menswear.
           </p>
           <button className="transition duration-300 ease-in-out transform hover:scale-105 bg-blue-600 text-white px-4 py-2 rounded-full mt-2">
@@ -70,7 +72,7 @@ export default function Footer() {
           <h2 className="text-lg font-bold mb-4">JOIN THE CLUB</h2>
           <p className="text-sm mb-4">
             Get exclusive access to new product releases, special offers, and
-            restocks. Join the ICON Club.
+            restocks. Join the DOKI Club.
           </p>
           <div className="relative">
             <input
@@ -87,7 +89,7 @@ export default function Footer() {
       
       {/* Bottom Section */}
       <div className="mt-8 border-t border-gray-700 pt-4 flex flex-col md:flex-row items-center justify-between">
-        <p className="text-xs">&copy; 2024, ICON. AMSTERDAM US</p>
+        <p className="text-xs">&copy; 2024, DOKI</p>
         <div className="flex space-x-4 mt-4 md:mt-0">
           {/* Add logos here */}
           <Shop/>

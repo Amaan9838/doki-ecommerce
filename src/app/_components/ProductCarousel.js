@@ -154,21 +154,34 @@
 // export default ProductCarousel;
 
 'use client';
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useContext } from "react";
 import Slider from "react-slick";
 import Link from "next/link";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import products from '../data/productsData.json';
-import { motion, inView } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
+import { WishlistContext } from '../contexts/WishlistContext';
 
 const ProductCard = ({ product, index }) => {
   // const [ref, inView] = useInView({
   //   triggerOnce: false,
   //   threshold: 0.25,
   // });
+
+
+  const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
+
+  const isWishlisted = wishlistItems.some((item) => item.id === product.id);
+
+  const handleClick = () => {
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
 
   const variants = {
     hidden: { opacity: 0, y: index % 1 === 0 ? 150 : -150 },
@@ -205,7 +218,9 @@ const ProductCard = ({ product, index }) => {
             {product.discount}
           </div>
           <div className="absolute md:top-[14%] top-[18%] right-3 sm:right-6 transform -translate-y-1/2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2">
-            <button className="w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md">
+            <button onClick={handleClick} className={`w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md transition-colors ${
+        isWishlisted ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+      }`}>
               <Heart className="text-gray-700 h-4 md:h-5" />
             </button>
             <button className="w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md">
@@ -219,9 +234,9 @@ const ProductCard = ({ product, index }) => {
           </h3>
           <div className="flex flex-row gap-4 items-center">
             {product.originalPrice && (
-              <p className="line-through text-gray-500">{product.originalPrice}</p>
+              <p className="line-through text-gray-500">${product.originalPrice}</p>
             )}
-            <p className="text-lg font-bold text-black">{product.price}</p>
+            <p className="text-lg font-bold text-black">${product.price}</p>
           </div>
         </div>
       </Link>
@@ -276,15 +291,15 @@ const ProductCarousel = () => {
       </Slider>
       <button
         onClick={() => sliderRef.current.slickPrev()}
-        className="md:flex hidden absolute top-1/3 -left-2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md"
+        className="md:flex hidden absolute top-[40%] -left-2 transform -translate-y-1/2  p-2 "
       >
-        <ChevronLeft />
+        <ChevronLeft className="sm:w-16 sm:h-24 text-[#411b0fa7] hover:text-gray-900"/>
       </button>
       <button
         onClick={() => sliderRef.current.slickNext()}
-        className="md:flex hidden absolute top-1/3 -right-2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md"
+        className="md:flex hidden absolute top-[40%] -right-2 transform -translate-y-1/2  p-2"
       >
-        <ChevronRight />
+        <ChevronRight className="sm:w-16 sm:h-24 text-[#411b0fa7] hover:text-gray-900"/>
       </button>
     </div>
   );

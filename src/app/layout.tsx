@@ -4,6 +4,7 @@ import "./globals.css";
 import Footer from './_components/Footer';
 import Header from './_components/Header';
 import { CartProvider } from './contexts/CartContext';
+import { WishlistProvider } from './contexts/WishlistContext';
 
 const raleway = Raleway({ subsets: ["latin"], weight: ["100","200","300","400",'500',"600","700","800","900"], 
 
@@ -21,10 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={raleway.className}> <CartProvider>
+      <body className={raleway.className}>  <WishlistProvider> <CartProvider>
       <Header />
      
-        {children}<Footer/></CartProvider></body>
+        {children}<Footer/></CartProvider>  </WishlistProvider></body>
     </html>
   );
 }

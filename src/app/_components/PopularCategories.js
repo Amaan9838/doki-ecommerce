@@ -38,7 +38,7 @@ const PopularCategories = () => {
   };
 
   const fadeInRight = {
-    hidden: { opacity: 0, x:100},
+    hidden: { opacity: 0, x: 100},
     visible: {
       opacity: 1,
       x: 0,
@@ -65,7 +65,7 @@ const PopularCategories = () => {
           
           whileInView="visible"
           viewport={{ once: false, amount: 0.25 }}
-          variants={isMobile ? fadeInRight : fadeIn}
+          variants={isMobile ? fadeInLeft : fadeIn}
         >
           <img 
             src={categories[0].imgSrc} 
@@ -76,7 +76,7 @@ const PopularCategories = () => {
             <p className="text-sm font-semibold text-gray-700 uppercase mb-2 ">New Season</p>
             <h3 className={`${ubuntu.variable} font-sans text-4xl font-bold text-gray-900 mb-4`}>Big patterns are back in fashion</h3>
             <p className="text-gray-600 mb-6 max-w-[450px]">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-            <a href="#" className="text-gray-700 font-semibold  flex items-center mt-10">
+            <a href="/categories" className="text-gray-700 font-semibold  flex items-center mt-10">
               Shop Now <span className="ml-2">→</span>
             </a>
           </div>

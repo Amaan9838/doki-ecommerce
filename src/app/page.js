@@ -10,6 +10,7 @@ import FeatureSection from './_components/FeatureSection';
 import LimitedOffer from './_components/LimitedOffer';
 import TopCategories from './_components/TopCategories';
 import Testimonials from './_components/Testimonials';
+import GridSection from './_components/GridSection';
 
 const sampleProductData = {
   name: "Basic High-Neck Puff Jacket",
@@ -39,7 +40,7 @@ export default function Home() {
         <Slideshow/>
         <div className="lg:mx-5 mx-2.5  py-6">
   
-  <FeatureSection/>
+  <GridSection/>
   <PopularCategories/>
 
   {/* <Slowshow/> */}
@@ -51,6 +52,8 @@ export default function Home() {
   <ProductCarousel />
   <LimitedOffer/>
   <TopCategories/>
+  <FeatureSection/>
+
   <Testimonials/>
   </div>
   {/* <ProductDetailsPage product={sampleProductData}/> */}

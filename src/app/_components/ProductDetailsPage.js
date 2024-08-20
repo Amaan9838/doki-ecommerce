@@ -10,8 +10,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import AccordionItem from './AccordionItem';
 import { Ubuntu } from "next/font/google";
-import GlobalApi from '../_utils/GlobalApi.jsx';
+// import GlobalApi from '../_utils/GlobalApi.jsx';
 import CustomerReviews from './CustomerReviews';
+import { WishlistContext } from '../contexts/WishlistContext';
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["300","400",'500',"700"] ,
     variable: '--font-ubuntu'
@@ -46,17 +47,29 @@ const ProductDetailsPage = ({ product }) => {
   const [selectedColor, setSelectedColor] = useState(2);
   const [selectedSize, setSelectedSize] = useState('M');
 
-  const [productList, setProductList] = useState([]);
-  useEffect( ()=>{
-    getProductList( ) ;
-  },[]) 
+  const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
+
+  const isWishlisted = wishlistItems.some((item) => item.id === product.id);
+
+  const handleClick = () => {
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  // const [productList, setProductList] = useState([]);
+  // useEffect( ()=>{
+  //   getProductList( ) ;
+  // },[]) 
   
-    const getProductList = ()=>{
-    GlobalApi.getProducts().then(resp=>{
-    console. log("CategoryList Resp:", resp.data.data );
-    setProductList(resp.data.data);
-    });
-  }
+  //   const getProductList = ()=>{
+  //   GlobalApi.getProducts().then(resp=>{
+  //   console. log("CategoryList Resp:", resp.data.data );
+  //   setProductList(resp.data.data);
+  //   });
+  // }
 
 
   const colors = [
@@ -143,10 +156,11 @@ const ProductDetailsPage = ({ product }) => {
               <ChevronRight size={24} />
             </button>
             <button
-              // onClick={toggleFullScreen}
+              onClick={handleClick}
               className="absolute top-2 right-2 bg-white p-2 rounded-full shadow z-10 group-hover:bg-red-400"
             >
-                          <div className='hover:text-red-400'><Heart/></div>
+                          <div className={`hover:text-red-400 transition-colors ${
+        isWishlisted ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}><Heart/></div>
 
             </button>
           </div>

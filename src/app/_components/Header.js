@@ -1,32 +1,58 @@
 'use client';
 
-import React, { useState,useContext,useEffect } from 'react';
+import React, { useState,useContext } from 'react';
 import { Menu, X, ShoppingCart, User2Icon, SearchIcon, Heart, ChevronDown } from 'lucide-react';
 import ShoppingCartModal from './ShoppingCartModal';
 import { CartContext } from '../contexts/CartContext';
 import Link from 'next/link';
-import GlobalApi from '../_utils/GlobalApi.jsx';
+import { motion } from 'framer-motion';
+// import GlobalApi from '../_utils/GlobalApi.jsx';
 
 const Header = () => {
   const [isOpenCategory, setIsOpenCategory] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuClose, setisMenuClose] = useState(false);
+
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { getTotalItems } = useContext(CartContext);
 
 
-  const [categoryList, setCategoryList] = useState([]);
-  useEffect( ()=>{
-    getCategoryList( ) ;
-  },[]) 
+  // const fadeVariantsX = {
+  //   hidden: { opacity: 0, x: -100 }, // Optional: add scale for a zoom effect
+  //   visible: { opacity: 1, x:0 },
+  // };
+
+  const fadeVariantsX = {
+    hidden: { opacity: 0, x: '-100%' },
+    visible: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: '100%' } // This will handle the fade out effect to the left
+  };
+
+
+ 
+  const fadeVariantsScaleIn = {
+    hidden: { opacity: 0, y: -10 , scale:1}, // Optional: add scale for a zoom effect
+    visible: { opacity: 1, y:0, scale:0.9 },
+  };
+
+
+//   const [categoryList, setCategoryList] = useState([]);
+//   useEffect( ()=>{
+//     getCategoryList( ) ;
+//   },[]) 
   
-    const getCategoryList = ()=>{
-    GlobalApi.getCategory().then(resp=>{
-    // console. log("CategoryList Resp:", resp.data.data);
-setCategoryList(resp.data.data);
-    });
-  }
+//     const getCategoryList = ()=>{
+//     GlobalApi.getCategory().then(resp=>{
+//     // console. log("CategoryList Resp:", resp.data.data);
+// setCategoryList(resp.data.data);
+//     });
+//   }
+const MenuClose =()=>{
+setisMenuClose(true);
+setIsMenuOpen(false);
+}
 
   const products = [
     { name: 'Tupac California Love T-Shirt', price: '9.99', originalPrice: '12.99', img: '/jacket.jpg' },
@@ -44,7 +70,7 @@ setCategoryList(resp.data.data);
         <div className="container mx-auto flex justify-between items-center py-4">
           {/* Hamburger menu button */}
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMenuOpen(true)}
             className="lg:hidden text-gray-700 focus:outline-none"
           >
             <Menu className="h-6 w-6" />
@@ -55,8 +81,10 @@ setCategoryList(resp.data.data);
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6 justify-center items-center">
-            <div className="relative">
-              <div className="flex items-center gap-1 hover:text-gray-900 hover:rounded-xl hover:bg-gray-200 px-2 py-2">
+            <div className="relative" onMouseEnter={() => setIsOpenCategory(true)}
+              onMouseLeave={() => setIsOpenCategory(false)} >
+              <div   
+              className="flex items-center gap-1 hover:text-gray-900 hover:rounded-xl hover:bg-gray-200 px-2 py-2">
                 <button
                   onMouseEnter={() => setIsOpenCategory(true)}
                   className="text-sm font-semibold text-gray-700"
@@ -81,48 +109,56 @@ setCategoryList(resp.data.data);
                         className="w-full h-[400px] object-cover rounded-lg"
                       />
                     </div>
-                    <div className="w-2/3 grid grid-cols-4 gap-4">
+                    <div className="w-[100%] grid grid-cols-1 ">
                       {/* Category Links */}
                       <div>
-                        <h4 className="font-medium text-gray-900">Trending</h4>
-                        <ul>
+                        <h4 className="font-black text-4xl text-gray-900 px-12">Trending</h4>
+                        <ul className='flex flex-row '>
                           {/* {categoryList.map((category, index)=>(
-                          <li key={index}><a href="#" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
+                          <li key={index}><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
 
                           ))} */}
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Boots</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Sandals</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Socks</a></li>
-                       
+                          <div>                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">BEST SELLERS</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">ICON X ROSS CAMPBELL</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">PANTS</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">DENIM JEANS</a></li>
+                          </div>
+<div>
+<li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">NEW ARRIVALS</a></li>
+
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">SHORTS</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Sandals</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Socks</a></li>
+                          </div>
                         </ul>
                       </div>
                       {/* Other Category Sections */}
-                      <div>
+                      {/* <div>
                         <h4 className="font-medium text-gray-900">Shop Collection</h4>
                         <ul>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Everything</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Core</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">New Arrivals</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Sale</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Everything</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Core</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">New Arrivals</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Sale</a></li>
                         </ul>
                       </div>
                       <div>
                         <h4 className="font-medium text-gray-900">All Clothing</h4>
                         <ul>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Basic Tees</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Artwork Tees</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Pants</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Hoodies</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Swimsuits</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Basic Tees</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Artwork Tees</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Pants</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Hoodies</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Swimsuits</a></li>
                         </ul>
-                      </div>
+                      </div> */}
                       <div>
                         <h4 className="font-medium text-gray-900">Brands</h4>
                         <ul>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Re-Arranged</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Counterfeit</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Full Nelson</a></li>
-                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">My Way</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Re-Arranged</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Counterfeit</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Full Nelson</a></li>
+                          <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">My Way</a></li>
                         </ul>
                       </div>
                     </div>
@@ -130,8 +166,8 @@ setCategoryList(resp.data.data);
                 </div>
               )}
             </div>
-            <a href="#" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1 lg:pr-2">About</a>
-            <a href="#" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1">Contact</a>
+            <a href="/categories" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1 lg:pr-2">About</a>
+            <a href="/categories" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1">Contact</a>
           </div>
 
           {/* Icons */}
@@ -186,64 +222,100 @@ setCategoryList(resp.data.data);
               className="relative text-gray-700 flex items-center"
             >
               <ShoppingCart className="h-5 m-2" />
+              {getTotalItems() >= 1 ? 
               <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full"> {getTotalItems()}</span>
-            </button>
+              : ''}
+              </button>
             <ShoppingCartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
             <Link href={'/SignIn'}>
             <button aria-label="User" className="text-gray-700 hidden lg:flex items-center">
               <User2Icon className="h-5 m-2" />
             </button>
             </Link>
-            <button aria-label="Favorites" className="text-gray-700 hidden lg:flex items-center">
+            <Link href={'/Wishlist'} aria-label="Favorites" className="text-gray-700 hidden lg:flex items-center">
               <Heart className="h-5 m-2" />
-            </button>
+            </Link>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden fixed top-0 left-0 w-full h-full bg-white shadow-lg z-50">
+ 
+  
+      {isMenuOpen && (
+        <motion.div
+          className={`lg:hidden fixed top-0 left-0 w-full h-full bg-white shadow-lg z-50`}
+          initial="hidden"
+          animate="visible"
+          exit="exit" // This triggers the exit animation
+          variants={ isMenuOpen ? fadeVariantsX  : ''}
+          transition={{ duration: 0.3 }} // Duration of the fade animation
+        >
+          <div className="">
             <div className="flex flex-col p-4">
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                className="text-gray-700 flex items-center mb-4"
-              >
-                <X className="h-6 w-6" />
-              </button>
-              <a href="#" className="text-gray-800 text-lg py-2">Home</a>
-              <a href="#" className="text-gray-800 text-lg py-2">Shop</a>
-              <a href="#" className="text-gray-800 text-lg py-2">About</a>
-              <a href="#" className="text-gray-800 text-lg py-2">Contact</a>
-              <div className="mt-4">
+              <div className="flex justify-between items-center py-4 border-b">
+                <Link href="/">
+                  <img src="/brand_logo.png" alt="Logo" className="h-6" />
+                </Link>
+
+                <button
+                  onClick={() => MenuClose()}
+                  className="text-gray-700 flex items-center mb-4"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              <a href="/categories" className="text-gray-800 text-lg pt-2">Home</a>
+
+              <div className="">
                 <button
                   onClick={() => setIsOpenCategory(!isOpenCategory)}
                   className="text-gray-800 text-lg py-2 flex items-center"
                 >
-                  Categories
-                  <ChevronDown className={`h-5 w-5 ml-2 transition-transform ${isOpenCategory ? 'rotate-180' : ''}`} />
+                  Shop by Category
+                  <ChevronDown
+                    className={`h-5 w-5 ml-2 transition-transform ${
+                      isOpenCategory ? 'rotate-180' : ''
+                    }`}
+                  />
                 </button>
                 {isOpenCategory && (
-                  <div className="flex flex-col mt-2 space-y-2">
-                    <a href="#" className="text-gray-700 text-sm py-1">Sneakers</a>
-                    <a href="#" className="text-gray-700 text-sm py-1">Boots</a>
-                    <a href="#" className="text-gray-700 text-sm py-1">Sandals</a>
-                    <a href="#" className="text-gray-700 text-sm py-1">Socks</a>
-                    {/* Other Categories */}
-                  </div>
+                  <motion.div
+                    className={`flex flex-col mt-2 space-y-2`}
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.95 },
+                      visible: { opacity: 1, scale: 1 }
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Sneakers</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Boots</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Sandals</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Socks</a>
+                  </motion.div>
                 )}
               </div>
+
+              <a href="/categories" className="text-gray-800 text-lg py-2">About</a>
+              <a href="/categories" className="text-gray-800 text-lg py-2">Contact</a>
             </div>
           </div>
-        )}
+        </motion.div>
+      )}
+  
+
       </header>
 
       {/* Bottom Menu for Mobile */}
+     
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50">
         <div className="flex justify-around items-center py-2">
-          <button aria-label="Wishlist" className="text-gray-700 flex flex-col items-center">
+          <Link href={'/Wishlist'} aria-label="Wishlist" className="text-gray-700 flex flex-col items-center">
             <Heart className="h-6" />
             <span className="text-xs">Wishlist</span>
-          </button>
+          </Link>
           <button aria-label="Search" className="text-gray-700 flex flex-col items-center" onClick={() => setIsOpenSearch(true)}>
             <SearchIcon className="h-6" />
             <span className="text-xs">Search</span>
@@ -252,12 +324,13 @@ setCategoryList(resp.data.data);
             <Menu className="h-6" />
             <span className="text-xs">Categories</span>
           </button>
-          <button aria-label="Account" className="text-gray-700 flex flex-col items-center">
+          <Link href={'/SignIn'} aria-label="Account" className="text-gray-700 flex flex-col items-center">
             <User2Icon className="h-6" />
             <span className="text-xs">Account</span>
-          </button>
+          </Link>
         </div>
       </div>
+     
     </>
   );
 };
@@ -328,9 +401,9 @@ export default Header;
 //             <a href="/" className="text-xl font-bold text-gray-800 transition-transform duration-300 ease-in-out">YourLogo</a>
 
 //             <div className="flex items-center space-x-4">
-//               <a href="#" className="text-sm text-gray-700 hover:text-gray-900">Categories</a>
-//               <a href="#" className="text-sm text-gray-700 hover:text-gray-900">Company</a>
-//               <a href="#" className="text-sm text-gray-700 hover:text-gray-900">Stores</a>
+//               <a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Categories</a>
+//               <a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Company</a>
+//               <a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Stores</a>
 //             </div>
 //             <div className="flex items-center space-x-4">
 //               <button aria-label="Search" className="text-gray-700 hover:text-gray-900">
@@ -375,8 +448,8 @@ export default Header;
 //                 </button>
 //                 {activeDropdown === 1 && (
 //                   <ul className="pl-4 mt-2 space-y-1 transition-all duration-300 ease-in-out">
-//                     <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Subcategory 1</a></li>
-//                     <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Subcategory 2</a></li>
+//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Subcategory 1</a></li>
+//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Subcategory 2</a></li>
 //                   </ul>
 //                 )}
 //               </li>
@@ -390,8 +463,8 @@ export default Header;
 //                 </button>
 //                 {activeDropdown === 2 && (
 //                   <ul className="pl-4 mt-2 space-y-1 transition-all duration-500 ease-in-out">
-//                     <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">About Us</a></li>
-//                     <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Careers</a></li>
+//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">About Us</a></li>
+//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Careers</a></li>
 //                   </ul>
 //                 )}
 //               </li>
@@ -405,8 +478,8 @@ export default Header;
 //                 </button>
 //                 {activeDropdown === 3 && (
 //                   <ul className="pl-4 mt-2 space-y-1 transition-all duration-300 ease-in-out">
-//                     <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Store 1</a></li>
-//                     <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Store 2</a></li>
+//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Store 1</a></li>
+//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Store 2</a></li>
 //                   </ul>
 //                 )}
 //               </li>
