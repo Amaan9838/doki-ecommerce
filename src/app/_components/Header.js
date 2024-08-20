@@ -90,10 +90,10 @@ setCategoryList(resp.data.data);
                           <li key={index}><a href="#" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
 
                           ))} */}
-                          {/* <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Boots</a></li>
+                          <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Boots</a></li>
                           <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Sandals</a></li>
                           <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Socks</a></li>
-                        */}
+                       
                         </ul>
                       </div>
                       {/* Other Category Sections */}
