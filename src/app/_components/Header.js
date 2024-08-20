@@ -86,10 +86,10 @@ setCategoryList(resp.data.data);
                       <div>
                         <h4 className="font-medium text-gray-900">Trending</h4>
                         <ul>
-                          {categoryList.map((category, index)=>(
+                          {/* {categoryList.map((category, index)=>(
                           <li key={index}><a href="#" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
 
-                          ))}
+                          ))} */}
                           {/* <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Boots</a></li>
                           <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Sandals</a></li>
                           <li><a href="#" className="text-sm text-gray-700 hover:text-gray-900">Socks</a></li>
@@ -130,7 +130,7 @@ setCategoryList(resp.data.data);
                 </div>
               )}
             </div>
-            <a href="#" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1 pr-2">About</a>
+            <a href="#" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1 lg:pr-2">About</a>
             <a href="#" className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-1">Contact</a>
           </div>
 

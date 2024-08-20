@@ -1,12 +1,14 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import useIsMobile from './useIsMobile'; // Import the custom hook
 import { Ubuntu } from "next/font/google";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["300","400",'500',"700"], variable: '--font-ubuntu' });
 
 const PopularCategories = () => {
+  const isMobile = useIsMobile(); // Check if the viewport is mobile
+
   const categories = [
     {
       title: 'Graphic Tees That Speak Your Style are back!',
@@ -36,7 +38,7 @@ const PopularCategories = () => {
   };
 
   const fadeInRight = {
-    hidden: { opacity: 0, x: 100 },
+    hidden: { opacity: 0, x:100},
     visible: {
       opacity: 1,
       x: 0,
@@ -44,17 +46,26 @@ const PopularCategories = () => {
     }
   };
 
+  const fadeIn = {
+    hidden: { opacity: 0},
+    visible: {
+      opacity: 1,
+      
+      transition: { type: 'spring', stiffness: 30, damping: 20, delay: 0.2 }
+    }
+  };
+
   return (
     <div className="container mx-auto py-8 px-0.5 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
         {/* Left Section: Big patterns are back in fashion */}
         <motion.div
           className="relative max-w-full h-[400px] lg:h-[auto] shadow-2xl rounded-3xl"
-          initial="hidden"
+          initial={isMobile ? 'visible' : 'hidden'}
+          
           whileInView="visible"
           viewport={{ once: false, amount: 0.25 }}
-          variants={fadeInLeft}
+          variants={isMobile ? fadeInRight : fadeIn}
         >
           <img 
             src={categories[0].imgSrc} 
@@ -74,10 +85,11 @@ const PopularCategories = () => {
         {/* Right Section: Two stacked cards */}
         <motion.div
           className="flex flex-col gap-6"
-          initial="hidden"
+          initial={isMobile ? 'visible' : 'hidden'}
+          
           whileInView="visible"
           viewport={{ once: false, amount: 0.25 }}
-          variants={fadeInRight}
+          variants={isMobile ? fadeInRight : fadeIn}
         >
           {categories.slice(1).map((category, index) => (
             <div key={index} className="relative h-[290px] shadow-2xl rounded-3xl">
