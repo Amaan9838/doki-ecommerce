@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useContext, useEffect } from 'react';
-import { Star, ChevronLeft, ChevronRight, Minus, Plus, Share2, Maximize, Heart } from 'lucide-react';
+import React, { useState, useRef, useContext } from 'react';
+import { Star, ChevronLeft, ChevronRight, Minus, Plus, Heart, LoaderIcon } from 'lucide-react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import Slider from 'react-slick';
 import { CartContext } from '../contexts/CartContext';
@@ -10,46 +10,44 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import AccordionItem from './AccordionItem';
 import { Ubuntu } from "next/font/google";
-// import GlobalApi from '../_utils/GlobalApi.jsx';
+import GlobalApi from '../_utils/GlobalApi.jsx';
 import CustomerReviews from './CustomerReviews';
 import { WishlistContext } from '../contexts/WishlistContext';
+import { useRouter } from 'next/navigation';
+import { UpdateCartContext } from '../_context/UpdateCartContext';
+import { UpdateWishlistContext } from '../_context/UpdateWishlistContext';
+
+import ReviewSystem from './ReviewSystem.js';
+
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["300","400",'500',"700"] ,
-    variable: '--font-ubuntu'
+  variable: '--font-ubuntu'
 });
-
-
-const sections = [
-  {
-    image: 'https://us.icon-amsterdam.com/cdn/shop/files/FUNNEL_DANTE_3.jpg?v=1718370637&width=1000',
-    title: 'What Our Customers Say',
-    quote: 'I am always impressed with the quality and the service',
-    description: 'We pride ourselves in providing you with the most modern designs and premium quality. Therefore, we continuously work in improving our products to be able to deliver you the best experience.',
-    reverse: false,
-  },
-  {
-    image: 'https://us.icon-amsterdam.com/cdn/shop/files/FUNNEL_DANTE_2.jpg?v=1718369331&width=1000',
-    title: 'So Versatile',
-    quote: 'You can wear it casual or dressy',
-    description: 'The Dante Overshirt is the perfect base for any outfit. Having a more casual day? No problem, just combine them with a pair of jeans for a laid-back fit. Pair it with more dressy trousers and you have the perfect outfit for a more sophisticated occasion.',
-    reverse: true,
-  },
-];
-
-
 
 const ProductDetailsPage = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
+  const router =  useRouter();
+
+  const jwt = sessionStorage.getItem('jwt');
+  const user= JSON.parse(sessionStorage.getItem('user'));
+  const {updateCart,setUpdateCart}=useContext(UpdateCartContext);
+  const {updateWishlist,setUpdateWishlist}=useContext(UpdateWishlistContext);
+
+  const [totalPrice, setTotalPrice] = useState(
+    product?.attributes?.discount ?(product?.attributes?.price * (1 - product?.attributes?.discount / 100)).toFixed(2): product?.attributes?.price
+  )
   const [isFullScreen, setIsFullScreen] = useState(false);
   const sliderRef = useRef(null);
-  const { addToCart } = useContext(CartContext);
+  const [loading, setLoading] = useState(false); // Add loading state
+ 
 
   const [selectedColor, setSelectedColor] = useState(2);
   const [selectedSize, setSelectedSize] = useState('M');
 
-  const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
+  // const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
+  // console.log("this is the product detaisl:",product);
 
-  const isWishlisted = wishlistItems.some((item) => item.id === product.id);
+  // const isWishlisted = wishlistItems.some((item) => item.id === product.id);
 
   const handleClick = () => {
     if (isWishlisted) {
@@ -59,28 +57,7 @@ const ProductDetailsPage = ({ product }) => {
     }
   };
 
-  // const [productList, setProductList] = useState([]);
-  // useEffect( ()=>{
-  //   getProductList( ) ;
-  // },[]) 
-  
-  //   const getProductList = ()=>{
-  //   GlobalApi.getProducts().then(resp=>{
-  //   console. log("CategoryList Resp:", resp.data.data );
-  //   setProductList(resp.data.data);
-  //   });
-  // }
 
-
-  const colors = [
-    { id: 0, src: 'https://us.icon-amsterdam.com/cdn/shop/files/1_982e1ddc-2aaf-4c40-b185-b941af340938.jpg?v=1718733180&width=800', alt: 'Teal shirt' },
-    { id: 1, src: 'https://us.icon-amsterdam.com/cdn/shop/files/2_7c30f712-829b-4865-822e-88d9e3164e84.jpg?v=1718733838&width=800', alt: 'Black shirt' },
-    { id: 2, src: 'https://us.icon-amsterdam.com/cdn/shop/files/1_f7a18344-ce36-4de1-bb26-eae953f2e2d7.jpg?v=1718733547&width=800', alt: 'Blue shirt' },
-    { id: 3, src: 'https://us.icon-amsterdam.com/cdn/shop/files/1_6ddc7cba-7b50-4739-95f8-78635cf8cadf.jpg?v=1718734164&width=800', alt: 'Gray shirt' },
-    // { id: 4, src: '/shirt-red.jpg', alt: 'Red shirt' },
-  ];
-
-  const sizes = ['S', 'M', 'L', 'XL', 'XXL'];
   
   const settings = {
     dots: false,
@@ -92,18 +69,64 @@ const ProductDetailsPage = ({ product }) => {
     waitForAnimate: false,
   };
 
-  const handleQuantityChange = (change) => {
-    setQuantity((prevQuantity) => Math.max(1, prevQuantity + change));
-  };
 
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-    alert(`${product.name} has been added to the cart.`);
-  };
+  const addToCart = ()=>{
+    setLoading(true);
+    if (!jwt){
+      router.push("/SignIn");
+      setLoading(false);
+      return;
+    }
+    const data={
+     data:{
+      products: product.id,
+      quantity: quantity,
+      amount: (quantity*totalPrice).toFixed(2),
+      users_permissions_users: user.id,
+      userId:user.id,
+     }
+    }
+    console.log(data);
+    GlobalApi.addToCart(data,jwt).then(resp=>{
+    console.log("this is the data",resp);
+    setUpdateCart(!updateCart);
+    setLoading(false);
 
-  const toggleFullScreen = () => {
-    setIsFullScreen(!isFullScreen);
-  };
+    },(e)=>{
+      alert("got error while add to cart");
+      setLoading(false);
+
+    }
+  )
+  }
+
+  const addToWishList = ()=>{
+    setLoading(true);
+    if (!jwt){
+      router.push("/SignIn");
+      setLoading(false);
+      return;
+    }
+    const data={
+     data:{
+      products: product.id,
+      users_permissions_users: user.id,
+      userId:user.id,
+     }
+    }
+    console.log(data);
+    GlobalApi.addToWishList(data,jwt).then(resp=>{
+    console.log("this is the data",resp);
+    setUpdateWishlist(!updateWishlist);
+    setLoading(false);
+
+    },(e)=>{
+      alert("got error while add to cart");
+      setLoading(false);
+
+    }
+  )
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28">
@@ -113,21 +136,7 @@ const ProductDetailsPage = ({ product }) => {
           <div className={`relative ${isFullScreen ? 'fixed inset-0 z-10 bg-white' : ''}`}>
             <div className="aspect-w-16 aspect-h-9">
               <Slider {...settings} ref={sliderRef}>
-                {product.images.map((image, index) => (
-                  <div key={index} className="w-full h-full">
-                    <InnerImageZoom
-                      src={image}
-                      zoomSrc={image}
-                      fullscreenOnMobile={true}
-                      zoomType="hover"
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  </div>
-                ))}
-               {/* {productList.id.map((product, index) => (
-      // Create a single slide for each product
-      <div key={index} className="w-full h-full">
- 
+
         {product.attributes.images.data.map((image, imgIndex) => (
           <div key={imgIndex} className="w-full h-full">
             <InnerImageZoom
@@ -139,8 +148,6 @@ const ProductDetailsPage = ({ product }) => {
             />
           </div>
         ))}
-      </div>
-    ))} */}
               </Slider>
             </div>
             <button
@@ -156,29 +163,19 @@ const ProductDetailsPage = ({ product }) => {
               <ChevronRight size={24} />
             </button>
             <button
-              onClick={handleClick}
+              onClick={() => addToWishList()}
               className="absolute top-2 right-2 bg-white p-2 rounded-full shadow z-10 group-hover:bg-red-400"
             >
-                          <div className={`hover:text-red-400 transition-colors ${
-        isWishlisted ? 'text-red-500' : 'text-gray-500 hover:text-red-500'}`}><Heart/></div>
+                          <div className={`hover:text-red-400 transition-colors `}><Heart/></div>
 
             </button>
           </div>
           <div className="flex overflow-x-auto mt-4">
-            {/* {product.images.map((image, index) => (
+         
+             {product.attributes.images.data.map((image, index) => (
               <div key={index} className="flex-shrink-0 w-1/5 px-2">
                 <img
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className={`w-full h-24 object-cover cursor-pointer transition-all duration-300 rounded-xl`}
-                  onMouseEnter={() => sliderRef.current.slickGoTo(index)}
-                />
-              </div>
-            ))} */}
-             {product.images.map((image, index) => (
-              <div key={index} className="flex-shrink-0 w-1/5 px-2">
-                <img
-                  src={image}
+                  src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + image.attributes.url}
                   alt={`Thumbnail ${index + 1}`}
                   className={`w-full h-24 object-cover cursor-pointer transition-all duration-300 rounded-xl`}
                   onMouseEnter={() => sliderRef.current.slickGoTo(index)}
@@ -190,7 +187,7 @@ const ProductDetailsPage = ({ product }) => {
 
         {/* Product Details */}
         <div className={` md:w-1/2 px-4 `}>
-         <div className="flex justify-between items-center"> <h2 className={`${ubuntu.variable} font-sans text-2xl sm:text-3xl font-bold mb-2`}>{product.name}</h2>  </div>
+         <div className="flex justify-between items-center"> <h2 className={`${ubuntu.variable} font-sans text-2xl sm:text-3xl font-bold mb-2`}>{product.attributes.title}</h2>  </div>
           <div className={`${ubuntu.variable} font-sans flex items-center justify-center gap-1 bg-green-700 rounded-2xl w-[60px] mb-4`}>
           <span className='text-white font-semibold font-sans'>{product.rating}</span>
             <div className="flex text-white">
@@ -199,33 +196,45 @@ const ProductDetailsPage = ({ product }) => {
           </div>
           {/* <div className="text-xl sm:text-2xl font-bold mb-6">${product.price.toFixed(2)}</div> */}
           <div className={`${ubuntu.variable} font-sans flex flex-row gap-2 items-center mb-6`}>
-                  {product.originalPrice && (
-                    <p className="text-sm sm:text-lg line-through text-gray-700">${product.originalPrice}</p>
-                  )}
-                  <p className="text-xl sm:text-2xl font-bold text-black">${product.price}</p>
+          {product.attributes.discount !== null ? (
+      <>
+                  <p className="text-xl sm:text-2xl font-bold text-black">${(product.attributes.price * (1 - product.attributes.discount / 100)).toFixed(2)}</p>
+                  {product.attributes.price && (
+                    <p className="text-sm sm:text-lg line-through text-gray-700">${product.attributes.price}</p>
+                 )} 
+                  <div className="flex items-center justify-between text-green-700"><p className="text-xl sm:text-[16px] font-medium text-green-700"> {product.attributes.discount}% off</p> </div>
+                
+                </>
+    ) : (
+                 <p className="text-xl sm:text-2xl font-bold text-black">${product.attributes.price}</p>
+                  
+          )}
                 </div>
-          {/* <p className="text-gray-600 mb-8 text-lg">{product.description}</p> */}
-
           <div className="mb-6">
+            {product.attributes.colors.data.legnth > 0 ? (
+              <>
         <h2 className="text-lg font-semibold mb-2">Color</h2>
         <div className="flex space-x-2">
-          {colors.map((color) => (
+          {product.attributes.colors.data.map((color) => (
             <div
               key={color.id}
-              className={`w-16 h-[84px] border-[2px] rounded-xl overflow-hidden cursor-pointer hover:border-black ${
-                selectedColor === color.id ? 'border-black' : 'border-gray-300'
+              className={`h-[20px] w-[20px] outline rounded-xl overflow-hidden cursor-pointer hover:border-black ${
+                selectedColor === color.id ? 'outline-black outline-offset-2' : 'outline-gray-100 outline-offset-1'
               } focus:outline-none`}
               onClick={() => setSelectedColor(color.id)}
             >
-              <img
-                src={color.src}
-                alt={color.alt}
+              <div
+               
+                alt={color.attributes.color}
     
-                className="object-cover h-[90px] w-[66px] rounded-lg mt-[-1px]"
+                className={` h-[20px] w-[20px] rounded-full `}
+                style={{backgroundColor: color.attributes.Hex_Value}}
               />
             </div>
           ))}
         </div>
+        </>
+        ):("")}
       <div className='my-4'>
         <span
   className="inline-flex text-sm font-medium items-center justify-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700"
@@ -268,42 +277,48 @@ const ProductDetailsPage = ({ product }) => {
   <p className="whitespace-nowrap text-sm">Out of stock</p>
 </span>
 </div>  
+{product.attributes.sizes.data.length > 0 ? (
       <div className={`${ubuntu.variable} font-sans`}>
         <h2 className="text-lg font-semibold mb-2 mt-4">Size</h2>
         <div className="flex space-x-2 items-center">
-          {sizes.map((size) => (
+          {product.attributes.sizes.data.map((size) => (
             <div
               key={size}
               className={`px-3 py-1 border-2 rounded-xl text-sm cursor-pointer hover:border-black ${
-                selectedSize === size
+                selectedSize === size.attributes.size
                   ? 'bg-gray-900 text-white border-black'
                   : 'bg-white text-gray-900  border-gray-300'
               } focus:outline-none`}
-              onClick={() => setSelectedSize(size)}
+              onClick={() => setSelectedSize(size.attributes.size)}
             >
-              {size}
+              {size.attributes.size}
             </div>
           ))}
           <a href="#" className="text-blue-500 ml-4 text-sm">
             Size Chart
           </a>
         </div>
+
       </div>
+      ):("")}
     </div>
           {/* Add to Cart */}
           <div className={`${ubuntu.variable} font-sans flex flex-col items-start gap-6 mb-8 `}>
           <button
-              onClick={handleAddToCart}
+              onClick={() => addToCart()}
               className="bg-black text-white lg:py-4 lg:px-32 px-16 py-2 md:px-28 sm:px-20 rounded-2xl hover:bg-gray-800 transition-colors duration-300 text-xl"
-            >
-              Add to cart
+           disabled={loading}
+           >
+             {loading ? <LoaderIcon className='animate-spin'/>:  " Add to cart"}
             </button>
+            {/* <ShoppingCartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)}  product={product.id}/> */}
+
             <div className="flex items-center border rounded-md mr-4">
-              <button onClick={() => handleQuantityChange(-1)} className="p-2">
+              <button onClick={() => setQuantity(quantity - 1)} className="p-2">
                 <Minus size={20} />
               </button>
               <span className="px-4">{quantity}</span>
-              <button onClick={() => handleQuantityChange(1)} className="p-2">
+              <button onClick={() => setQuantity(quantity + 1)} className="p-2">
                 <Plus size={20} />
               </button>
             </div>
@@ -319,67 +334,31 @@ const ProductDetailsPage = ({ product }) => {
     
       <AccordionItem title="Product Description" >
         <div>
-          <h4 className={` font-semibold`}>Manufacture, Care and Fit</h4>
-          <p>Mens White & Blue Partner In Crime Tie & Dye Oversized T-shirt</p>
-          <p><span className={` font-semibold`}>Country of Origin</span> - India</p>
-          <p><span className={` font-semibold`}>Manufactured By</span> - Bewakoof Brands Pvt Ltd, Sairaj logistic hub #A5, BMC pipeline road, Opposite all saints high school, Amane, Bhiwandi, Thane, Maharashtra 421302</p>
-          <p><span className={` font-semibold`}>Packed By</span> - Bewakoof Brands Pvt Ltd, Sairaj logistic hub #A5, BMC pipeline road, Opposite all saints high school, Amane, Bhiwandi, Thane, Maharashtra 421302</p>
-          <p><span className={` font-semibold`}>Commodity</span> - Mens T-Shirt</p>
-        </div>
+          <p>{product.attributes.description}</p>
+                  </div>
       </AccordionItem>
       <AccordionItem title="Shipping Info">
-      {/* {product.shipping_info.map((shipping, index) => ( */}
+
       <div  className="shipping-detail text-sm text-gray-600">
           <div className='mb-2'><p ><strong className='text-black'>United States :</strong>  $9.99 (Free for orders over $150)
           Delivery time: 4-8 business days</p></div>
           <span><strong className='text-black'>Canada :</strong>  $14.99 (Free for orders over $150)
           Delivery time: 4-8 business days</span>
-          {/* <span>
-            <strong>{shipping.country} :</strong> {shipping.price} (Free for orders over {shipping.freeShippingThreshold})
-            <br />
-            Delivery time: {shipping.deliveryTime}
-          </span> */}
+         
         </div>
       {/* ))} */}
       </AccordionItem>
-      <AccordionItem title="Product Specifications">
-        <div>
-          <ul className="list-disc pl-5">
-            <li>Oversized fit - Super Loose On Body Thoda Hawa Aane De</li>
-            <li>Single Jersey - Classic, lightweight jersey fabric comprising 100% cotton.</li>
-          </ul>
-        </div>
-      </AccordionItem>
+    
     </div>
         </div>
       </div>
 
-      {/* Description Tab */}
-      {/* <div className="mt-16">
-        <h3 className="text-lg sm:text-xl font-bold mb-4">Description</h3>
-        <p className="text-gray-600">{product.fullDescription}</p>
-      </div> */}
+      
 
       <div className="mx-auto my-6 px-4">
-        <CustomerReviews/>
-        {/* <h3 className='text-4xl font-bold pb-10'>Key Highlights</h3>
-      {sections.map((section, index) => (
-        <div
-          key={index}
-          className={`flex flex-col md:flex-row ${section.reverse ? 'md:flex-row-reverse' : ''} mb-12`}
-        >
-          <div className="md:w-1/2">
-            <img src={section.image} alt={section.title} className="w-full h-auto" />
-          </div>
-          <div className="md:w-1/2 flex items-center">
-            <div className="p-8">
-              <h3 className="text-sm font-semibold text-gray-500 mb-2">{section.title.toUpperCase()}</h3>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">{section.quote}</h2>
-              <p className="text-gray-700">{section.description}</p>
-            </div>
-          </div>
-        </div>
-      ))} */}
+        <ReviewSystem itemId={product.id} reviewData={product.attributes.reviews.data}/>
+        {/* <CustomerReviews/> */}
+  
     </div>
     </div>
   );

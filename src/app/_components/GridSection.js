@@ -100,43 +100,72 @@
 
 // export default GridSection;
 'use client';
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Lora } from "next/font/google";
+import GlobalApi from '../_utils/GlobalApi.jsx';
+
 
 const ubuntu = Lora({ subsets: ["latin-ext"], weight: ["400",'500',"700"] ,
   variable: '--font-ubuntu'
 });
 
 const GridSection = () => {
+
+  const [hero, setHero] = useState([]);
+  const [videoItem, setVideoItem] = useState(null);
+  useEffect( ()=>{
+    getProductList( ) ;
+  },[]) 
+  
+    const getProductList = ()=>{
+    GlobalApi.getHeroSections().then(resp=>{
+      const filteredData = resp.data.data.filter(item => item.attributes.section === 2);
+      console.log("Filtered CategoryList Resp:", filteredData);
+      const video = filteredData.find(item => item.attributes.type === 'video');
+      setVideoItem(video);
+
+      setHero(filteredData);
+    });
+  }
   return (
     <section className={` ${ubuntu.variable} font-sans mx-auto p-4`}>
+      
       <div className="flex md:flex-row flex-col gap-4">
         {/* Top Left */}
+        {hero.length > 0 && (
+        <>
         <div className='relative flex flex-row md:flex-col gap-4'>
-          <AnimatedGridItem src="/tshirt.jpg" label="Elegance" />
-          <AnimatedGridItem src="/jacket.jpg" label="Be cool, be fashionable" />
+          {hero.slice(0, 2).map((item,index)=>(
+          <AnimatedGridItem key={index} src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
+  ))
+        }
+          {/* <AnimatedGridItem src="/jacket.jpg" label="Be cool, be fashionable" /> */}
         </div>
 
         {/* Top Middle (Autoplay Video) */}
-        <motion.div
-          className="relative grid3 w-full h-[300px] md:h-[556px] lg:min-w-[250px]"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          viewport={{ once: true }}
-        >
-          <video
-            src="/main_grid.mov"
-            autoPlay
-            loop
-            muted
-            className="w-full h-full object-cover md:min-w-[250px]"
-          ></video>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className={`${ubuntu.variable} font-sans text-white text-3xl font-bold`}>Find your signature look</span>
-          </div>
-        </motion.div>
+        {videoItem && (
+              <motion.div
+                className="relative grid3 w-full h-[300px] md:h-[556px] lg:min-w-[250px]"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1 }}
+                viewport={{ once: true }}
+              >
+                <video
+                  src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + videoItem?.attributes?.image?.data[0]?.attributes?.url}
+                  autoPlay
+                  loop
+                  muted
+                  className="w-full h-full object-cover md:min-w-[250px]"
+                ></video>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className={`${ubuntu.variable} font-sans text-white text-3xl font-bold`}>
+                    {videoItem.attributes.title}
+                  </span>
+                </div>
+              </motion.div>
+            )}
 
         {/* Top Right */}
         <div
@@ -144,15 +173,14 @@ const GridSection = () => {
      
         >
         
-          <AnimatedGridItem
-            src="https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F31%2F0d%2F310dbe8e29ea91d278a4ec73c137304e30bc8fb1.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
-            label="Dress to Express"
-          />
-          <AnimatedGridItem
-            src="https://img.freepik.com/premium-photo/young-man-red-coat-white-shirt-gray-beackground_73107-1699.jpg?w=360"
-            label="Fashion Frolic"
-          />
+        {hero.slice(2, 4).map((item,index)=>(
+          <AnimatedGridItem key={index} src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
+  ))
+        }
+        
         </div>
+        </>
+      )}
       </div>
     </section>
   );

@@ -1,28 +1,32 @@
 'use client';
 
-import React, { useState,useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import { Menu, X, ShoppingCart, User2Icon, SearchIcon, Heart, ChevronDown } from 'lucide-react';
 import ShoppingCartModal from './ShoppingCartModal';
-import { CartContext } from '../contexts/CartContext';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-// import GlobalApi from '../_utils/GlobalApi.jsx';
+import GlobalApi from '../_utils/GlobalApi.jsx';
+import { UpdateCartContext } from '../_context/UpdateCartContext';
+import { UpdateWishlistContext } from '../_context/UpdateWishlistContext';
+
 
 const Header = () => {
+  
+  const isLogin = sessionStorage.getItem('jwt') ? true : false;
   const [isOpenCategory, setIsOpenCategory] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuClose, setisMenuClose] = useState(false);
-
+  const jwt = sessionStorage.getItem('jwt');
+const user = JSON.parse(sessionStorage.getItem('user'));
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { getTotalItems } = useContext(CartContext);
+  const {updateCart,setUpdateCart}=useContext(UpdateCartContext);
+  const {updateWishlist,setUpdateWishlist}=useContext(UpdateWishlistContext);
 
-
-  // const fadeVariantsX = {
-  //   hidden: { opacity: 0, x: -100 }, // Optional: add scale for a zoom effect
-  //   visible: { opacity: 1, x:0 },
-  // };
+const [cartItemsList,setCartItemsList]=useState([]);
+  const [totalCartItems,setTotalCartItems] =  useState(0);
+const [totalWishlistItems,setTotalWishlistItems] = useState();
 
   const fadeVariantsX = {
     hidden: { opacity: 0, x: '-100%' },
@@ -31,27 +35,50 @@ const Header = () => {
   };
 
 
- 
-  const fadeVariantsScaleIn = {
-    hidden: { opacity: 0, y: -10 , scale:1}, // Optional: add scale for a zoom effect
-    visible: { opacity: 1, y:0, scale:0.9 },
-  };
 
-
-//   const [categoryList, setCategoryList] = useState([]);
-//   useEffect( ()=>{
-//     getCategoryList( ) ;
-//   },[]) 
+  const [categoryList, setCategoryList] = useState([]);
+  useEffect(()=>{
+    getCategoryList();
+  },[]); 
   
-//     const getCategoryList = ()=>{
-//     GlobalApi.getCategory().then(resp=>{
-//     // console. log("CategoryList Resp:", resp.data.data);
-// setCategoryList(resp.data.data);
-//     });
-//   }
+  useEffect(()=>{
+    if(jwt){
+getCartItems();
+getWishlistItems();
+}
+  },[updateCart],[updateWishlist]);
+
+    const getCategoryList = ()=>{
+    GlobalApi.getCategory().then(resp=>{
+    // console. log("CategoryList Resp:", resp.data.data);
+setCategoryList(resp.data.data);
+    });
+  }
+// Used to get Total Cart Items
+
+  const getCartItems=async()=>{
+    const cartItemsList_=await GlobalApi.getCartItems(user.id,jwt);
+    // console.log(cartItemsList_);
+    setTotalCartItems(cartItemsList_.length);
+    setCartItemsList(cartItemsList_);
+  }
+
+  const getWishlistItems=async()=>{
+    const wishlistItemsList=await GlobalApi.getWishlistItems(user.id,jwt);
+    // console.log(wishlistItemsList);
+    setTotalWishlistItems(wishlistItemsList.length);
+    // setCartItemsList(cartItemsList_);
+  }
+  
 const MenuClose =()=>{
 setisMenuClose(true);
 setIsMenuOpen(false);
+}
+const onDeleteItem=(id)=>{
+GlobalApi.deleteCartItems(id,jwt).then(resp=>{
+  alert("Item removed !")
+  getCartItems();
+})
 }
 
   const products = [
@@ -117,17 +144,24 @@ setIsMenuOpen(false);
                           <li key={index}><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
 
                           ))} */}
-                          <div>                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">BEST SELLERS</a></li>
+                          <div>                 
+                            {categoryList.slice(0,4).map((category,index)=>(
+                                     <li key={index} className="py-4"><a href={"/category/"+category.attributes.name} className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
+                          ))}
+                                     {/* <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">BEST SELLERS</a></li>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">SUITS</a></li>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">PANTS</a></li>
-                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">DENIM JEANS</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">DENIM JEANS</a></li> */}
                           </div>
 <div>
-<li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">NEW ARRIVALS</a></li>
+{categoryList.slice(4).map((category,index)=>(
+                                     <li key={index} className="py-4" ><a href={"/category/"+category.attributes.name} className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">{category.attributes.name}</a></li>
+                          ))}
+{/* <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">NEW ARRIVALS</a></li>
 
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">SHORTS</a></li>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Sandals</a></li>
-                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Socks</a></li>
+                          <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Socks</a></li> */}
                           </div>
                         </ul>
                       </div>
@@ -151,7 +185,7 @@ setIsMenuOpen(false);
                           <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Swimsuits</a></li>
                         </ul>
                       </div> */}
-                      <div>
+                      {/* <div>
                         <h4 className="font-black text-4xl text-gray-900 my-2.5">Buy without ocassion</h4>
                         <ul>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Casual Wears</a></li>
@@ -159,7 +193,7 @@ setIsMenuOpen(false);
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Suits</a></li>
                           <li className="py-4"><a href="/categories" className="text-xl font-medium px-12 text-gray-700 hover:text-gray-900">Other Accessories</a></li>
                         </ul>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -221,18 +255,23 @@ setIsMenuOpen(false);
               className="relative text-gray-700 flex items-center"
             >
               <ShoppingCart className="h-5 m-2" />
-              {getTotalItems() >= 1 ? 
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full"> {getTotalItems()}</span>
+              {totalCartItems >= 1 ? 
+              <span className="absolute -top-[0.25rem] -right-[0.25rem] bg-red-600 text-white text-[0.65rem] leading-[0.8rem] px-2 py-1 rounded-full"> {totalCartItems}</span>
               : ''}
               </button>
-            <ShoppingCartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-            <Link href={'/SignIn'}>
+            <ShoppingCartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cartItemsList={cartItemsList} onDeleteItem={onDeleteItem}/>
+          
+            <Link href={`${!isLogin ?'/SignIn': '/profile'}`}>
             <button aria-label="User" className="text-gray-700 hidden lg:flex items-center">
               <User2Icon className="h-5 m-2" />
             </button>
             </Link>
-            <Link href={'/Wishlist'} aria-label="Favorites" className="text-gray-700 hidden lg:flex items-center">
-              <Heart className="h-5 m-2" />
+            <Link href={'/Wishlist'} aria-label="Favorites" className="relative text-gray-700 hidden lg:flex items-center">
+              <Heart className="h-5 m-2"/>
+              {totalWishlistItems >= 1 ? 
+              <span className="absolute -top-[0.25rem] -right-[0.25rem] bg-red-600 text-white text-[0.65rem] leading-[0.8rem] px-2 py-1 rounded-full"> {totalWishlistItems}</span>
+              : ''}
+             
             </Link>
           </div>
         </div>

@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { Ubuntu } from "next/font/google";
+import Link from 'next/link';
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -9,10 +10,10 @@ const ubuntu = Ubuntu({
   variable: '--font-ubuntu'
 });
 
-export default function MiddleNav() {
+export default function MiddleNav(categoryList) {
   const scrollContainerRef = useRef(null);
   const clonedContainerRef = useRef(null);
-
+console.log("this is the category list data", categoryList)
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     const clonedContainer = clonedContainerRef.current;
@@ -72,10 +73,10 @@ export default function MiddleNav() {
           className={`flex gap-8 uppercase whitespace-nowrap ${ubuntu.variable} font-sans font-semibold text-lg`}
           ref={scrollContainerRef}
         >
-          {categories.map((category, index) => (
+          {categoryList.categoryList.map((category, index) => (
             <div key={index} className="flex-none">
               <ul>
-                <li>{category}</li>
+              <Link href={"/category/"+category.attributes.name} className='cursor-pointer'><li>{category.attributes.name}</li></Link>
               </ul>
             </div>
           ))}
@@ -84,10 +85,10 @@ export default function MiddleNav() {
           className={`absolute top-0 left-0 flex gap-8 uppercase whitespace-nowrap ${ubuntu.variable} font-sans font-semibold text-lg`}
           ref={clonedContainerRef}
         >
-          {categories.map((category, index) => (
+          {categoryList.categoryList.map((category, index) => (
             <div key={index} className="flex-none">
               <ul>
-                <li>{category}</li>
+              <Link href={"/category/"+category.attributes.name} className='cursor-pointer'><li>{category.attributes.name}</li></Link>
               </ul>
             </div>
           ))}

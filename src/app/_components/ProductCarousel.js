@@ -12,17 +12,17 @@
 // const ProductCarousel = ({denimJean}) => {
 //   const sliderRef = useRef(null);
 
-//   // const [productList, setProductList] = useState([]);
-//   // useEffect( ()=>{
-//   //   getProductList( ) ;
-//   // },[]) 
+  // const [productList, setProductList] = useState([]);
+  // useEffect( ()=>{
+  //   getProductList( ) ;
+  // },[]) 
   
-//   //   const getProductList = ()=>{
-//   //   GlobalApi.getProducts().then(resp=>{
-//   //   console. log("CategoryList Resp:", resp.data.data);
-//   //   setProductList(resp.data.data);
-//   //   });
-//   // }
+  //   const getProductList = ()=>{
+  //   GlobalApi.getProducts().then(resp=>{
+  //   console. log("CategoryList Resp:", resp.data.data);
+  //   setProductList(resp.data.data);
+  //   });
+  // }
 
 //   const settings = {
 //     dots: true,
@@ -154,26 +154,24 @@
 // export default ProductCarousel;
 
 'use client';
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useContext } from "react";
 import Slider from "react-slick";
 import Link from "next/link";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Heart, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
-import products from '../data/productsData.json';
 import { motion } from 'framer-motion';
 import { WishlistContext } from '../contexts/WishlistContext';
+import { generateSlug } from '../_utils/slug';
+
+
 
 const ProductCard = ({ product, index }) => {
-  // const [ref, inView] = useInView({
-  //   triggerOnce: false,
-  //   threshold: 0.25,
-  // });
+ 
 
+  // const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
 
-  const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
-
-  const isWishlisted = wishlistItems.some((item) => item.id === product.id);
+  // const isWishlisted = wishlistItems.some((item) => item.id === product.id);
 
   const handleClick = () => {
     if (isWishlisted) {
@@ -207,20 +205,23 @@ const ProductCard = ({ product, index }) => {
       transition={{ duration: 0.3, ease: 'easeIn' }}
       className="product-card relative group px-2"
     >
-      <Link href={`/products/${product.id}`}>
+      <a href={`/products/${product.id}/${generateSlug(product?.attributes?.title)}`}>
         <div className="relative w-full md:h-[28rem] h-[16rem] overflow-hidden">
           <img
-            src={product.images[0]}
-            alt={product.description}
+            src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+
+                  product?.attributes?.images?.data[0]?.attributes?.url}
+            alt={product.attributes.description}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 rounded"
           />
+          {product.attributes.discount && (
           <div className="absolute top-2 left-4 sm:left-6 bg-white text-green-700 opacity-85 font-medium text-xs px-2 py-1 rounded">
-            {product.discount}
-          </div>
+            {(product.attributes.discount)}%
+          </div>) }
           <div className="absolute md:top-[14%] top-[18%] right-3 sm:right-6 transform -translate-y-1/2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2">
-            <button onClick={handleClick} className={`w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md transition-colors ${
+            <button onClick={''} className={`w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md transition-colors `}>
+             {/* ${
         isWishlisted ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
-      }`}>
+      } */}
               <Heart className="text-gray-700 h-4 md:h-5" />
             </button>
             <button className="w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md">
@@ -230,24 +231,36 @@ const ProductCard = ({ product, index }) => {
         </div>
         <div className="p-4">
           <h3 className="font-semibold max-h-[48px] overflow-hidden">
-            {product.name.length > 30 ? `${product.name.substring(0, 30)}...` : product.name}
+            {product.attributes.title.length > 30 ? `${product.attributes.title.substring(0, 30)}...` : product.attributes.title}
           </h3>
           <div className="flex flex-row gap-4 items-center">
-            {product.originalPrice && (
-              <p className="line-through text-gray-500">${product.originalPrice}</p>
-            )}
-            <p className="text-lg font-bold text-black">${product.price}</p>
+          {product.attributes.discount ? (
+      <>
+        <p className="line-through text-gray-500">
+          ${product.attributes.price.toFixed(2)}
+        </p>
+        <p className="text-lg font-bold text-black">
+          ${(product.attributes.price * (1 - product.attributes.discount / 100)).toFixed(2)}
+        </p>
+        <p className="text-sm text-green-600">
+          ({product.attributes.discount}% off)
+        </p>
+      </>
+    ) : (
+      <p className="text-lg font-bold text-black">
+        ${product.attributes.price.toFixed(2)}
+      </p>
+    )}
           </div>
         </div>
-      </Link>
+      </a>
     </motion.div>
   );
 };
 
-const ProductCarousel = () => {
+const ProductCarousel = (productList) => {
   const sliderRef = useRef(null);
-  const [productList, setProductList] = useState(products);
-
+  
   const settings = {
     dots: true,
     infinite: true,
@@ -285,7 +298,7 @@ const ProductCarousel = () => {
   return (
     <div className="relative product-carousel">
       <Slider {...settings} ref={sliderRef}>
-        {productList.map((product, index) => (
+        {productList.productList.slice(0,8).map((product, index) => (
           <ProductCard key={product.id} product={product} index={index} />
         ))}
       </Slider>

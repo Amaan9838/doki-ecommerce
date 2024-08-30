@@ -1,18 +1,55 @@
-// import React from 'react';
-
+'use client';
+import React, { useEffect, useState } from 'react';
 import Link from "next/link";
+import GlobalApi from '../../_utils/GlobalApi.jsx';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image.js';
+import { LoaderIcon } from 'lucide-react';
+
 
 const SignIn = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(); // Add loading state
+
+  const redirectTo = searchParams.get('redirectTo') || '/'; // Default to home page if no redirect
+
+  useEffect(()=>{
+const jwt = sessionStorage.getItem('jwt');
+if (jwt){
+  router.push(redirectTo); // Redirect to the original page
+}
+  },[])
+
+  const onSignIn=()=>{
+    setLoading(true);
+    GlobalApi.SignIn(email,password).then(resp=>{
+      sessionStorage.setItem('user', JSON.stringify(resp.data.user));
+      sessionStorage.setItem('jwt',resp.data.jwt);
+      alert('Signned In sucessfully');
+      router.push(redirectTo); // Redirect to the original page
+      setLoading(false);
+    },(e)=>{
+      alert(e?.response?.data?.error?.message);
+      setLoading(false);
+
+    })
+  }
+
   return (
     <div className=" flex justify-center">
-      <div className=" mt-[130px] w-full max-w-[500px] p-4 sm:p-14 bg-white border border-gray-200 rounded-3xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
+      <div className="m-20 w-full max-w-[500px] p-4 sm:p-14 bg-white border border-gray-200 rounded-3xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
         <div className="text-center">
-          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
+      <div className="flex items-center justify-center">  <Image unoptimized={true} src={'/brand_logo_large.png'} width={200} height={150} className="pb-4"/>
+      </div>
+          <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">Sign in </h1>
           <p className="mt-2 text-sm font-medium text-gray-600 dark:text-neutral-400">
             Don't have an account yet?
             <Link
               className="text-blue-600 decoration-2 ml-1 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500"
-              href={"/SignUp"}
+              href={`/SignUp?redirectTo=${redirectTo}`}
             >
               Sign up here
             </Link>
@@ -56,7 +93,7 @@ const SignIn = () => {
           </div>
 
           {/* Form */}
-          <form>
+          <>
             <div className="grid gap-y-4">
               {/* Form Group */}
               <div>
@@ -68,6 +105,7 @@ const SignIn = () => {
                     type="email"
                     id="email"
                     name="email"
+                    onChange={(e) => setEmail(e.target.value)}
                     className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                     required
                     placeholder='Enter your email'
@@ -110,6 +148,7 @@ const SignIn = () => {
                     type="password"
                     id="password"
                     name="password"
+                    onChange={(e) => setPassword(e.target.value)}
                     className="py-3 px-4 block w-full border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                     required
                     aria-describedby="password-error"
@@ -135,13 +174,13 @@ const SignIn = () => {
               {/* End Form Group */}
 
               <button
-                type="submit"
+              onClick={()=>onSignIn()}
                 className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-gray-800 text-gray-100 shadow-sm hover:bg-gray-900 focus:outline-none focus:bg-gray-900 disabled:opacity-50 disabled:pointer-events-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
               >
-                Sign in
+              {loading ? <LoaderIcon className='animate-spin'/>:  <span> Sign in</span>}
               </button>
             </div>
-          </form>
+          </>
         </div>
       </div>
     </div>
