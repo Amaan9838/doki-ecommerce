@@ -107,7 +107,7 @@ const Checkout=()=>{
               <div className="space-y-6">
               {cartItemsList.map((cart,index)=>(
               
-                  <div className="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm"
+                  <div key={index} className="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm"
                   >
                     <>
                     <img
