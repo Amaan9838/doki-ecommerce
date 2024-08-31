@@ -11,6 +11,7 @@ import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import GlobalApi from "../_utils/GlobalApi";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { initGA, logEvent } from "@/lib/analytics"; 
 
 const CheckoutPage = ({ amount, cartItemsList }) => {
   const stripe = useStripe();
@@ -33,6 +34,11 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    initGA(); // Initialize Google Analytics
+    logEvent("Checkout", "Started"); // Log event when the user starts the checkout process
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -131,6 +137,7 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
         toast({title:'Payment Successful'})
       })
       router.push('/order-confirmation')
+      logEvent("Purchase", "Completed", `Order ID: ${paymentId}`);
     })
 
     }else{
