@@ -52,9 +52,10 @@ export default function Checkout() {
       const calculatedSubTotal = parseFloat(total.toFixed(2));
       setSubTotal(calculatedSubTotal);
       setTotalAmount((calculatedSubTotal + shippingFee).toFixed(2));
-    }else{
-       router.push('/'); 
     }
+    // else{
+    //    router.push('/'); 
+    // }
   }, [cartItemsList]);
 
   const getCartItems = async (userId, jwtToken) => {
