@@ -1,53 +1,69 @@
-'use client';
-import React, { useContext,useState,useEffect } from "react";
-// import { WishlistContext } from "../contexts/WishlistContext";
+'use client'; // Ensure this is a client-side component
+import React, { useContext, useState, useEffect } from "react";
 import Image from "next/image";
-import { Heart, Loader2Icon } from "lucide-react";
+import { Heart, Loader2Icon, ShoppingCartIcon } from "lucide-react";
 import GlobalApi from '../_utils/GlobalApi';
 import Loader from "../_components/Loader";
 import { UpdateWishlistContext } from '../_context/UpdateWishlistContext';
+import { useRouter } from 'next/navigation';
+import { generateSlug } from "../_utils/slug";
 
-
-export default function Component() {
-  // const { wishlistItems, removeFromWishlist } = useContext(WishlistContext);
-  const jwt = sessionStorage.getItem('jwt');
-  const user = JSON.parse(sessionStorage.getItem('user'));
-  const [wishlistItemsList,setwishlistItemsList]=useState([]);
-  const {updateWishlist,setUpdateWishlist}=useContext(UpdateWishlistContext);
+export default function Wishlist() {
+  const router = useRouter();
+  const [wishlistItemsList, setWishlistItemsList] = useState([]);
+  const { updateWishlist, setUpdateWishlist } = useContext(UpdateWishlistContext);
 
   const [loading, setLoading] = useState(false); // Add loading state
-  const [Wishlistloading, setWishlistloading] = useState(false); // Add loading state
+  const [wishlistLoading, setWishlistLoading] = useState(false); // Add loading state
 
-  
-  const getWishlistItems = ()=>{
+  const [jwt, setJwt] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Access sessionStorage only on the client side
+    if (typeof window !== 'undefined') {
+      setJwt(sessionStorage.getItem('jwt'));
+      setUser(JSON.parse(sessionStorage.getItem('user')));
+    }
+  }, []);
+
+  const getWishlistItems = () => {
+    if (!jwt || !user) return;
+    
     setLoading(true);
-    GlobalApi.getWishlistItems(user.id,jwt).then(resp=>{
-    console. log("WishlIst Items Resp:", resp);
-    setwishlistItemsList(resp);
-    setUpdateWishlist(!updateWishlist);
-    setLoading(false);
-
+    GlobalApi.getWishlistItems(user.id, jwt).then(resp => {
+      // console.log("Wishlist Items Resp:", resp);
+      setWishlistItemsList(resp);
+      setUpdateWishlist(!updateWishlist);
+      setLoading(false);
     });
   }
 
-  useEffect(()=>{
-    if(jwt){
+  useEffect(() => {
+    if (jwt && user) {
       getWishlistItems();
-}
-  },[]);
+    }
+  }, [jwt, user]);
 
-  const OnDeleteWishlistItem =(id)=>{
-    setWishlistloading(true);
-    GlobalApi.deleteWishlistItems(id,jwt).then(resp=>{
-      // alert("Item removed !");
-      setWishlistloading(false);
+  const onDeleteWishlistItem = (id) => {
+    setWishlistLoading(true);
+    GlobalApi.deleteWishlistItems(id, jwt).then(resp => {
+      setWishlistLoading(false);
       getWishlistItems();
-    })
+    });
   }
+
+  const addToCart = (item) => {
+    // Implement add to cart logic here
+    console.log("Add to cart", item);
+  }
+
   if (loading) {
-    return  <div className="flex justify-center items-center h-screen">
-   <Loader/>
-  </div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
   }
 
   return (
@@ -60,39 +76,50 @@ export default function Component() {
               Items you've saved to your wishlist
             </p>
           </div>
-          <div className="grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {wishlistItemsList.map((item) => (
+              // <a href={`/products/${item.productId}/${generateSlug(item.name)}`}>
               <div
                 key={item.id}
                 className="bg-card rounded-lg shadow-sm overflow-hidden"
               >
                 <div className="relative">
-                <Image
-                  src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+item.image} // Assuming you want to use the first image from the `images` array
-                  alt={item.name}
-                  width={500}
-                  height={800}
-                  className="w-full h-64 object-cover"
-                  style={{ aspectRatio: "600/500", objectFit: "cover" }}
-                />
-                <div className={`absolute top-[12%] right-3 sm:right-6 transform -translate-y-1/2 flex flex-col gap-2  transition-colors`}><Heart className="text-red-500" fill="red"/></div>
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    width={500}
+                    height={800}
+                    className="w-full h-64 object-cover"
+                    style={{ aspectRatio: "600/500", objectFit: "cover" }}
+                  />
+                  <div onClick={() => onDeleteWishlistItem(item.id)} className="absolute top-[12%] right-3 sm:right-6 transform -translate-y-1/2 flex flex-col gap-2 transition-colors cursor-pointer">
+                    <Heart className="text-red-500" fill="red" />
+                  </div>
                 </div>
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p className="text-primary font-medium">${item.price}</p>
-                  <button
-                    onClick={() => OnDeleteWishlistItem(item.id)}
-                    className="mt-4 w-full bg-gray-200 text-gray-700 border border-gray-300 rounded-md py-2 px-4 flex items-center justify-center hover:bg-gray-300"
-                  >
-                    <TrashIcon className="w-4 h-4 mr-2" />
-                    Remove from Wishlist
-                    {Wishlistloading ? <Loader2Icon className="w-4 h-4 ml-2 animate-spin"/>: ""}
-                  </button>
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={() => onDeleteWishlistItem(item.id)}
+                      className="mt-4 bg-gray-200 text-gray-700 border border-gray-300 rounded-md py-2 px-4 flex items-center justify-center hover:bg-gray-300"
+                    >
+                      <TrashIcon className="w-4 h-4 mr-2" />
+                      {wishlistLoading ? <Loader2Icon className="w-4 h-4 ml-2 animate-spin" /> : "Remove from Wishlist"}
+                    </button>
+                    <button
+                      onClick={() => addToCart(item)}
+                      className="mt-4 bg-blue-600 text-white border border-blue-700 rounded-md py-2 px-4 flex items-center justify-center hover:bg-blue-700"
+                    >
+                      <ShoppingCartIcon className="w-4 h-4 mr-2" />
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
+              // </a>
             ))}
           </div>
-        
         </div>
       </div>
     </section>

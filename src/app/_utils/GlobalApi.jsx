@@ -106,6 +106,7 @@ const getCartItems=(userId,jwt)=>axiosClient.get('/user-carts?filters[userId][$e
              image:item?.attributes.products?.data[0].attributes.images.data[0].attributes.url,
              price:item?.attributes.products?.data[0].attributes.price,
              id:item?.id,
+             productId:item?.attributes.products?.data[0].id
             }))
             return wishlistItemsList
         })

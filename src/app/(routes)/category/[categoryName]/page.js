@@ -9,7 +9,7 @@ import Image from 'next/image';
 export default async function ProductCategory({params}) {
   const productList=await GlobalApi.getProductByCategory(params.categoryName);
   const categoryList=await GlobalApi.getCategoryList();
-  console.log("this is product list", productList);
+  // console.log("this is product list", productList);
   return (
     <>
  

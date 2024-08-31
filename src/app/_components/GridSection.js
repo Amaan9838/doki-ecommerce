@@ -121,7 +121,7 @@ const GridSection = () => {
     const getProductList = ()=>{
     GlobalApi.getHeroSections().then(resp=>{
       const filteredData = resp.data.data.filter(item => item.attributes.section === 2);
-      console.log("Filtered CategoryList Resp:", filteredData);
+      // console.log("Filtered CategoryList Resp:", filteredData);
       const video = filteredData.find(item => item.attributes.type === 'video');
       setVideoItem(video);
 

@@ -22,7 +22,7 @@ export default function LimitedOffer() {
   const getProductList = () => {
     GlobalApi.getHeroSections().then(resp => {
       const filteredData = resp.data.data.filter(item => item.attributes.section === 4);
-      console.log("Filtered CategoryList Resp:", filteredData);
+      // console.log("Filtered CategoryList Resp:", filteredData);
       setHero(filteredData);
       setLoading(false);
     });

@@ -86,9 +86,9 @@ const ProductDetailsPage = ({ product }) => {
       userId:user.id,
      }
     }
-    console.log(data);
+    // console.log(data);
     GlobalApi.addToCart(data,jwt).then(resp=>{
-    console.log("this is the data",resp);
+    // console.log("this is the data",resp);
     setUpdateCart(!updateCart);
     setLoading(false);
 
@@ -114,9 +114,9 @@ const ProductDetailsPage = ({ product }) => {
       userId:user.id,
      }
     }
-    console.log(data);
+    // console.log(data);
     GlobalApi.addToWishList(data,jwt).then(resp=>{
-    console.log("this is the data",resp);
+    // console.log("this is the data",resp);
     setUpdateWishlist(!updateWishlist);
     setLoading(false);
 

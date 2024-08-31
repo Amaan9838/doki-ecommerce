@@ -13,7 +13,7 @@ const ubuntu = Ubuntu({
 export default function MiddleNav(categoryList) {
   const scrollContainerRef = useRef(null);
   const clonedContainerRef = useRef(null);
-console.log("this is the category list data", categoryList)
+// console.log("this is the category list data", categoryList)
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     const clonedContainer = clonedContainerRef.current;
