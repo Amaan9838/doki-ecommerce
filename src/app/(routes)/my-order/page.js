@@ -1,24 +1,27 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import GlobalApi from '../../_utils/GlobalApi';
 
 export default function MyOrder() {
     const router = useRouter();
     const [orderData, setOrderData] = useState([]);
+    const [jwt, setJwt] = useState(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const jwt = sessionStorage.getItem('jwt');
-        const user = JSON.parse(sessionStorage.getItem('user'));
+        const storedJwt = sessionStorage.getItem('jwt');
+      const storedUser = JSON.parse(sessionStorage.getItem('user'));
 
-        if (!jwt) {
+
+        if (!storedJwt) {
             router.replace('/');
             return;
         }
 
-        const getMyOrder = async () => {
+        const getMyOrder = async (userId, jwtToken) => {
             try {
-                const orderList = await GlobalApi.getMyOrder(user.id, jwt);
+                const orderList = await GlobalApi.getMyOrder(userId, jwtToken);
                 console.log("Fetched order list:", orderList);
                 setOrderData(orderList);
             } catch (error) {
@@ -26,7 +29,7 @@ export default function MyOrder() {
             }
         };
 
-        getMyOrder();
+        getMyOrder(storedUser.id, storedJwt);
     }, [router]);
     console.log("this is the order data:", orderData)
     const getStatusColor = useCallback((status) => {

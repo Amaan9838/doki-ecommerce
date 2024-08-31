@@ -10,6 +10,7 @@ import {
 import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import GlobalApi from "../_utils/GlobalApi";
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 const CheckoutPage = ({ amount, cartItemsList }) => {
   const stripe = useStripe();
@@ -127,6 +128,7 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
       cartItemsList.forEach((item,index) => {
         GlobalApi.deleteCartItems(item.id, jwt).then(resp=>{
         })
+        toast({title:'Payment Successful'})
       })
       router.push('/order-confirmation')
     })

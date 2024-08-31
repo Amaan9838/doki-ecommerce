@@ -12,12 +12,15 @@ import { UpdateWishlistContext } from '../_context/UpdateWishlistContext';
 
 const Header = () => {
   
-  const isLogin = sessionStorage.getItem('jwt') ? true : false;
+  // const isLogin = sessionStorage.getItem('jwt') ? true : false;
+  const [isLogin, setIsLogin] = useState(false);
+  const [jwt, setJwt] = useState(null);
+  const [user, setUser] = useState(null);
   const [isOpenCategory, setIsOpenCategory] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuClose, setisMenuClose] = useState(false);
-  const jwt = sessionStorage.getItem('jwt');
-const user = JSON.parse(sessionStorage.getItem('user'));
+//   const jwt = sessionStorage.getItem('jwt');
+// const user = JSON.parse(sessionStorage.getItem('user'));
   const [isOpenSearch, setIsOpenSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -37,17 +40,22 @@ const [totalWishlistItems,setTotalWishlistItems] = useState();
 
 
   const [categoryList, setCategoryList] = useState([]);
-  useEffect(()=>{
+  useEffect(() => {
+    // Only run this code on the client
+    if (typeof window !== 'undefined') {
+      const storedJwt = sessionStorage.getItem('jwt');
+      const storedUser = JSON.parse(sessionStorage.getItem('user'));
+      if (storedJwt) {
+        setIsLogin(true);
+        setJwt(storedJwt);
+        setUser(storedUser);
+        getCartItems(storedUser.id, storedJwt);
+        getWishlistItems(storedUser.id, storedJwt);
+      }
+    }
     getCategoryList();
-  },[]); 
-  
-  useEffect(()=>{
-    if(jwt){
-getCartItems();
-getWishlistItems();
-}
-  },[updateCart],[updateWishlist]);
-
+  }, [updateCart, updateWishlist]);
+// console.log("this is the user:",user.id)
     const getCategoryList = ()=>{
     GlobalApi.getCategory().then(resp=>{
     // console. log("CategoryList Resp:", resp.data.data);
@@ -56,15 +64,15 @@ setCategoryList(resp.data.data);
   }
 // Used to get Total Cart Items
 
-  const getCartItems=async()=>{
-    const cartItemsList_=await GlobalApi.getCartItems(user.id,jwt);
+  const getCartItems=async(userId, jwtToken)=>{
+    const cartItemsList_=await GlobalApi.getCartItems(userId, jwtToken);
     // console.log(cartItemsList_);
     setTotalCartItems(cartItemsList_.length);
     setCartItemsList(cartItemsList_);
   }
 
-  const getWishlistItems=async()=>{
-    const wishlistItemsList=await GlobalApi.getWishlistItems(user.id,jwt);
+  const getWishlistItems=async(userId, jwtToken)=>{
+    const wishlistItemsList=await GlobalApi.getWishlistItems(userId, jwtToken);
     // console.log(wishlistItemsList);
     setTotalWishlistItems(wishlistItemsList.length);
     // setCartItemsList(cartItemsList_);

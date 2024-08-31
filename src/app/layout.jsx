@@ -2,7 +2,7 @@
 // import type { Metadata } from "next";
 import { Raleway } from "next/font/google";
 import "./globals.css";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { Toaster } from "@/components/ui/toaster"
 import Footer from './_components/Footer';
 import Header from './_components/Header';
 import {UpdateCartContext} from './_context/UpdateCartContext';
@@ -35,7 +35,7 @@ const showHeader=params=='/SignIn'||params=='/SignUp'?false:true;
         <UpdateCartContext.Provider value={{ updateCart,setUpdateCart }}>
       {showHeader&&<Header />}
      
-        {children}<Footer/> </UpdateCartContext.Provider> </UpdateWishlistContext.Provider></body>
+        {children}<Footer/><Toaster /> </UpdateCartContext.Provider> </UpdateWishlistContext.Provider></body>
     </html>
     // </PayPalScriptProvider>
   );

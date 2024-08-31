@@ -5,13 +5,15 @@ import GlobalApi from '../../_utils/GlobalApi.jsx';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image.js';
 import { LoaderIcon } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast"
+
 
 
 const SignUp = () => {
   const router = useRouter();
+const { toast } = useToast()
+  
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [username, setusername] = useState('');
 
   const [password, setPassword] = useState('');
@@ -36,11 +38,11 @@ const SignUp = () => {
       console.log(resp.data.jwt);
       sessionStorage.setItem('user', JSON.stringify(resp.data.user));
       sessionStorage.setItem('jwt',resp.data.jwt);
-      alert('Account created sucessfully');
+      toast({title:'Account created sucessfully'});
       router.push('/');
       setLoading(false);
     },(e)=>{
-      alert(e?.response?.data?.error?.message);
+      toast({title:`${e?.response?.data?.error?.message}`});
       setLoading(false);
     }
   
@@ -141,6 +143,7 @@ const SignUp = () => {
                     />
                   </div>
                 </div> */}
+       
      <div>
                   <label htmlFor="Username" className="block text-sm mb-2 font-semibold text-gray-600 dark:text-white">
                     User Name

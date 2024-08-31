@@ -6,6 +6,7 @@ import convertToSubcurrency from "@/lib/convertToSubcurrency";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Loader from "@/app/_components/Loader";
+import { useRouter } from "next/navigation";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
   throw new Error("NEXT_PUBLIC_STRIPE_PUBLIC_KEY is not defined");
@@ -13,21 +14,33 @@ if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 export default function Checkout() {
-  const user = JSON.parse(sessionStorage.getItem('user'));
-  const jwt = sessionStorage.getItem('jwt');
+  const [jwt, setJwt] = useState(null);
+  const [user, setUser] = useState(null);
   const [cartItemsList, setCartItemsList] = useState([]);
   const [totalCartItems, setTotalCartItems] = useState(0);
   const [subTotal, setSubTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const [totalAmount, setTotalAmount] = useState(null);
   const shippingFee = 5.00;
 
   useEffect(() => {
-    if (!jwt) {
+ 
+    if (typeof window !== 'undefined') {
+      const storedJwt = sessionStorage.getItem('jwt');
+      const storedUser = JSON.parse(sessionStorage.getItem('user'));
+      console.log("JWT:", storedJwt);
+      console.log("User:", storedUser);
+      if (storedJwt) {
+        setJwt(storedJwt);
+        setUser(storedUser);
+        getCartItems(storedUser.id, storedJwt);
+      }else if(!storedJwt){
       router.push('/SignIn'); 
+      }
     }
-    getCartItems();
+  
   }, []);
 
   useEffect(() => {
@@ -39,12 +52,14 @@ export default function Checkout() {
       const calculatedSubTotal = parseFloat(total.toFixed(2));
       setSubTotal(calculatedSubTotal);
       setTotalAmount((calculatedSubTotal + shippingFee).toFixed(2));
+    }else{
+       router.push('/'); 
     }
   }, [cartItemsList]);
 
-  const getCartItems = async () => {
+  const getCartItems = async (userId, jwtToken) => {
     setLoading(true);
-    const cartItemsList_ = await GlobalApi.getCartItems(user.id, jwt);
+    const cartItemsList_ = await GlobalApi.getCartItems(userId, jwtToken);
     setTotalCartItems(cartItemsList_.length);
     setCartItemsList(cartItemsList_);
     setLoading(false);

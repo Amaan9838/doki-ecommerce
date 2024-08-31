@@ -3,7 +3,7 @@
 const { default: axios } = require("axios");
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:1337/api'
+    baseURL: 'https://doki-ecommerce-backend.onrender.com/api'
 });
 
 const axiosClientNew = axios.create({
@@ -33,12 +33,12 @@ const registerUser = (
     //  firstName, lastName,
 username,
     email,
-    password,) => axiosClient.post('/auth/local/register',{
+    password) => axiosClient.post('/auth/local/register',{
         // firstName:firstName,
         // lastName:lastName,
         username:username,
         email:email,
-        password:password
+        password:password,
     });
 
     const SignIn = (email,password,) => axiosClient.post('/auth/local',{
@@ -79,7 +79,7 @@ const getCartItems=(userId,jwt)=>axiosClient.get('/user-carts?filters[userId][$e
          actualPrice:item.attributes.products?.data[0].attributes.price,
          id:item.id,
          product:item?.attributes.products?.data[0].id,
-         price:item.attributes.amount
+         price:item.attributes.amount,
         }))
         return cartItemsList
     })
