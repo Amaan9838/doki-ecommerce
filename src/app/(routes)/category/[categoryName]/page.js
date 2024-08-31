@@ -161,7 +161,7 @@ export default async function ProductCategory({params}) {
         <div className="flex flex-col relative group cursor-pointer ">
           <div className="relative mb-2">
             <Image
-              src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + product?.attributes?.images?.data[0]?.attributes?.url} 
+              src={product?.attributes?.images?.data[0]?.attributes?.url} 
               alt={product.attributes.title}
               width={300}
               height={400}

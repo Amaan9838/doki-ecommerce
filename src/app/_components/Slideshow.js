@@ -101,7 +101,7 @@ export default function Slideshow() {
 
             {slide.attributes.type === 'video' ? (
               <div>
-              <video preload='none' src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+slide?.attributes?.image?.data[0]?.attributes?.url} 
+              <video preload='none' src={slide?.attributes?.image?.data[0]?.attributes?.url} 
               autoPlay muted loop className="w-full h-full min-h-screen object-cover" 
               onLoadedData={handleVideoLoad}
               />
@@ -115,7 +115,7 @@ export default function Slideshow() {
             </div></div>
             ) : (
               <div>
-              <img src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+slide?.attributes?.image?.data[0]?.attributes?.url} alt={slide.attributes.title} className="w-full object-cover h-screen" />
+              <img src={slide?.attributes?.image?.data[0]?.attributes?.url} alt={slide.attributes.title} className="w-full object-cover h-screen" />
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
               <h1 className={`text-${slide.attributes.ImageBg == 'dark' ? 'white' : 'black'} text-4xl font-bold`}>{slide.attributes.title}</h1>
               <span className={`text-${slide.color}`}>{slide.attributes.description}</span>

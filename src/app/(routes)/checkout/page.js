@@ -85,7 +85,7 @@ export default function Checkout() {
             {cartItemsList.map((cart, index) => (
               <div key={index} className="grid grid-cols-[80px_1fr_80px] items-center gap-4">
                 <img
-                  src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + cart.image}
+                  src={cart.image}
                   alt={cart.name}
                   width={80}
                   height={80}

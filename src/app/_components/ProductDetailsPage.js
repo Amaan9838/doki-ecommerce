@@ -140,8 +140,8 @@ const ProductDetailsPage = ({ product }) => {
         {product.attributes.images.data.map((image, imgIndex) => (
           <div key={imgIndex} className="w-full h-full">
             <InnerImageZoom
-              src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + image.attributes.url}
-              zoomSrc={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + image.attributes.url}
+              src={ image.attributes.url}
+              zoomSrc={ image.attributes.url}
               fullscreenOnMobile={true}
               zoomType="hover"
               className="w-full h-full object-cover rounded-xl"
@@ -175,7 +175,7 @@ const ProductDetailsPage = ({ product }) => {
              {product.attributes.images.data.map((image, index) => (
               <div key={index} className="flex-shrink-0 w-1/5 px-2">
                 <img
-                  src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + image.attributes.url}
+                  src={ image.attributes.url}
                   alt={`Thumbnail ${index + 1}`}
                   className={`w-full h-24 object-cover cursor-pointer transition-all duration-300 rounded-xl`}
                   onMouseEnter={() => sliderRef.current.slickGoTo(index)}

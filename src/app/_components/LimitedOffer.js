@@ -59,7 +59,7 @@ export default function LimitedOffer() {
       <>
       <div className="md:w-1/2 flex justify-center md:justify-start">
         <Image 
-          src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + hero[0]?.attributes?.image?.data[0]?.attributes?.url}
+          src={ hero[0]?.attributes?.image?.data[0]?.attributes?.url}
           alt={hero[0]?.attributes?.title || "Fashion Promo"} 
           width={400}
           height={300}

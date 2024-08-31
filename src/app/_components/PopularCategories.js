@@ -73,7 +73,7 @@ const PopularCategories = () => {
               variants={isMobile ? fadeInLeft : fadeIn}
             >
               <img 
-                src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + hero[0]?.attributes?.image?.data[0]?.attributes?.url} 
+                src={hero[0]?.attributes?.image?.data[0]?.attributes?.url} 
                 alt={hero[0]?.attributes?.title || "Big patterns are back in fashion"} 
                 className="w-full h-full object-cover rounded-3xl"
               />
@@ -98,7 +98,7 @@ const PopularCategories = () => {
               {hero.slice(1).map((item, index) => (
                 <div key={index} className="relative h-[290px] shadow-2xl rounded-3xl">
                   <img 
-                    src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + item?.attributes?.image?.data[0]?.attributes?.url} 
+                    src={item?.attributes?.image?.data[0]?.attributes?.url} 
                     alt={item.attributes.title} 
                     className="w-full h-full object-cover rounded-3xl"
                   />

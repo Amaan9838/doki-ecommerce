@@ -137,7 +137,7 @@ const GridSection = () => {
         <>
         <div className='relative flex flex-row md:flex-col gap-4'>
           {hero.slice(0, 2).map((item,index)=>(
-          <AnimatedGridItem key={index} src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
+          <AnimatedGridItem key={index} src={item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
   ))
         }
           {/* <AnimatedGridItem src="/jacket.jpg" label="Be cool, be fashionable" /> */}
@@ -153,7 +153,7 @@ const GridSection = () => {
                 viewport={{ once: true }}
               >
                 <video
-                  src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + videoItem?.attributes?.image?.data[0]?.attributes?.url}
+                  src={ videoItem?.attributes?.image?.data[0]?.attributes?.url}
                   autoPlay
                   loop
                   muted
@@ -174,7 +174,7 @@ const GridSection = () => {
         >
         
         {hero.slice(2, 4).map((item,index)=>(
-          <AnimatedGridItem key={index} src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
+          <AnimatedGridItem key={index} src={item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
   ))
         }
         

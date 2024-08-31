@@ -29,7 +29,7 @@ export default function MyOrder() {
         getMyOrder();
     }, [router]);
     console.log("this is the order data:", orderData)
-    const getStatusColor = (status) => {
+    const getStatusColor = useCallback((status) => {
         switch (status) {
             case 'pending':
                 return 'bg-yellow-100 text-yellow-800';
@@ -40,7 +40,7 @@ export default function MyOrder() {
             default:
                 return 'bg-gray-100 text-gray-800';
         }
-    };
+    },[]);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -70,7 +70,7 @@ export default function MyOrder() {
                                         {order.orderItemList.map((item, index) => (
                                             <div key={index} className="flex items-center space-x-4">
                                                 <img
-                                                    src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL + item.product.data.attributes.images.data[0].attributes.url}
+                                                    src={item.product.data.attributes.images.data[0].attributes.url}
                                                     alt={item.product.data.attributes.title}
                                                     className="w-16 h-16 object-cover rounded"
                                                 />
