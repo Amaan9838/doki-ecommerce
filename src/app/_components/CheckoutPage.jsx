@@ -36,8 +36,21 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+   
     initGA(); // Initialize Google Analytics
     logEvent("Checkout", "Started"); // Log event when the user starts the checkout process
+    gtag("event", "begin_checkout", {
+      currency: "USD",  
+      value: amount,
+      items: [
+        {
+        item_id: `SKU_${cartItemsList[0].id}`,
+        item_name: cartItemsList.name,
+        price: cartItemsList.price,
+        quantity: cartItemsList.quantity
+      }
+      ]
+    });
   }, []);
 
   const handleInputChange = (e) => {
@@ -145,14 +158,10 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
         currency: "USD",  
         items: [
           {
-          // item_id: `SKU_${cartItemsList[0].id}`,
-          // item_name: cartItemsList.name,
-          // price: cartItemsList.price,
-          // quantity: cartItemsList.quantity
-          item_id: `SKU_234`,
-          item_name: 'Mens Fashion Trends',
-          price: amount,
-          quantity: 1
+          item_id: `SKU_${cartItemsList[0].id}`,
+          item_name: cartItemsList.name,
+          price: cartItemsList.price,
+          quantity: cartItemsList.quantity
         }
         ]
       });

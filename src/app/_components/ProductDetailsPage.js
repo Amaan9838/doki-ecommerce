@@ -164,6 +164,17 @@ const ProductDetailsPage = ({ product }) => {
         );
       }
     });
+    gtag("event", "add_to_cart", {
+      currency: "USD",
+      value: subTotal.toFixed(2),
+      items: [
+        {
+          item_id: `SKU_${cartItemsList.id}`,
+          item_name: cartItemsList.name, 
+          price: cartItemsList.price,
+          quantity: quantities
+        }]
+    })
   };
   
 

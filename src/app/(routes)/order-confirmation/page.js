@@ -28,6 +28,7 @@ export default function OrderSuccess() {
           <p className="mt-2 text-center text-sm text-gray-600">
             Thank you for your purchase. Your order has been received and is being processed.
           </p>
+          <a href="/my-order"><h3 className='mt-6 text-center text-lg font-extrabold text-blue-500'>Track your Order</h3></a>
         </div>
         {/* <div className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">

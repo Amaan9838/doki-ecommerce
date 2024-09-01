@@ -32,6 +32,7 @@ useEffect(() => {
     const storedJwt = sessionStorage.getItem('jwt');
     const storedUser = JSON.parse(sessionStorage.getItem('user'));
 
+   
     setJwt(storedJwt);
     setUser(storedUser);
 
@@ -46,6 +47,20 @@ useEffect(() => {
       initialQuantities[item.id] = item.quantity;
     });
     setQuantities(initialQuantities);
+
+    if(cartItemsList.length > 0){
+      gtag("event", "view_cart", {
+  currency: "USD",
+  value: subTotal.toFixed(2),
+  items: [
+    {
+      item_id: `SKU_${cartItemsList.id}`,
+      item_name: cartItemsList.name, 
+      price: cartItemsList.price,
+      quantity: quantities
+    }]
+})
+    }
   }
 }, [cartItemsList]);
 
@@ -88,7 +103,6 @@ const Checkout=()=>{
   onClose()
   if(cartItemsList.length > 0){
   router.push(jwt?'/checkout':'/SignIn')
-
 }
 }
   return (

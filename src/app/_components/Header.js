@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import GlobalApi from '../_utils/GlobalApi.jsx';
 import { UpdateCartContext } from '../_context/UpdateCartContext';
 import { UpdateWishlistContext } from '../_context/UpdateWishlistContext';
-
+import { toast } from '@/components/ui/use-toast';
 
 const Header = () => {
   
@@ -84,8 +84,19 @@ setIsMenuOpen(false);
 }
 const onDeleteItem=(id)=>{
 GlobalApi.deleteCartItems(id,jwt).then(resp=>{
-  alert("Item removed !")
+  toast({title: "Item removed !"})
   getCartItems();
+  gtag("event", "remove_from_cart", {
+    currency: "USD",
+    value: subTotal.toFixed(2),
+    items: [
+      {
+        item_id: `SKU_${cartItemsList.id}`,
+        item_name: cartItemsList.name, 
+        price: cartItemsList.price,
+        quantity: cartItemsList.quantity
+      }]
+  })
 })
 }
 
