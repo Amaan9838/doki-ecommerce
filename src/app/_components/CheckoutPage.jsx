@@ -137,7 +137,25 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
         toast({title:'Payment Successful'})
       })
       router.push('/order-confirmation')
-      logEvent("Purchase", "Completed", `Order ID: ${paymentId}`);
+      // logEvent("Purchase", "Completed", `Order ID: ${paymentId}`);
+      gtag("event", "purchase", {
+        transaction_id: paymentId,
+        value: amount,
+        shipping: 5.00,
+        currency: "USD",  
+        items: [
+          {
+          // item_id: `SKU_${cartItemsList[0].id}`,
+          // item_name: cartItemsList.name,
+          // price: cartItemsList.price,
+          // quantity: cartItemsList.quantity
+          item_id: `SKU_234`,
+          item_name: 'Mens Fashion Trends',
+          price: amount,
+          quantity: 1
+        }
+        ]
+      });
     })
 
     }else{
