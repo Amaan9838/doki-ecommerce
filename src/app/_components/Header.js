@@ -336,10 +336,13 @@ GlobalApi.deleteCartItems(id,jwt).then(resp=>{
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <a href="/categories" className="text-gray-700 text-sm py-1">Denim Jeans</a>
+                    {categoryList.map((category,index)=>(
+                                     <a key={index} className="text-gray-700 text-sm py-1" href={"/category/"+category.attributes.name}>{category.attributes.name}</a>
+                          ))}
+                    {/* <a href="/categories" className="text-gray-700 text-sm py-1">Denim Jeans</a>
                     <a href="/categories" className="text-gray-700 text-sm py-1">Casual Shirts</a>
                     <a href="/categories" className="text-gray-700 text-sm py-1">Suits</a>
-                    <a href="/categories" className="text-gray-700 text-sm py-1">Jackets</a>
+                    <a href="/categories" className="text-gray-700 text-sm py-1">Jackets</a> */}
                   </motion.div>
                 )}
               </div>
@@ -385,156 +388,3 @@ export default Header;
 
 
 
-
-// 'use client';
-// import React, { useState, useEffect, useRef } from 'react';
-// import { Menu, X, ShoppingCart, ChevronDown } from 'lucide-react';
-
-// const Header = () => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const [activeDropdown, setActiveDropdown] = useState(null);
-//   const menuRef = useRef(null);
-
-//   const handleDropdownToggle = (index) => {
-//     setActiveDropdown(activeDropdown === index ? null : index);
-//   };
-
-//   const handleOutsideClick = (event) => {
-//     if (menuRef.current && !menuRef.current.contains(event.target)) {
-//       setIsMenuOpen(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (isMenuOpen) {
-//       document.addEventListener('mousedown', handleOutsideClick);
-//     } else {
-//       document.removeEventListener('mousedown', handleOutsideClick);
-//     }
-//     return () => {
-//       document.removeEventListener('mousedown', handleOutsideClick);
-//     };
-//   }, [isMenuOpen]);
-
-//   return (
-//     <>
-//       <header className="bg-white shadow-md py-4 px-6">
-//         <div className="container mx-auto flex justify-between items-center">
-//           {/* Hamburger and Cart for Mobile */}
-//           <div className="lg:hidden flex items-center justify-between w-full">
-//             <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Menu" className="text-gray-700 hover:text-gray-900">
-//               <Menu className="h-6 w-6" />
-//             </button>
-
-//             {/* Centered Logo on Mobile */}
-//             <div className="flex-grow text-center transition-transform duration-300 ease-in-out">
-//               <a href="/" className="text-xl font-bold text-gray-800">
-//                 YourLogo
-//               </a>
-//             </div>
-
-//             <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Cart" className="text-gray-700 hover:text-gray-900 relative">
-//               <ShoppingCart className="h-6 w-6" />
-//               <div className="h-3 w-3 rounded-full absolute top-[-2px] right-[-2px] bg-red-600 text-white text-[8px] flex items-center justify-center">
-//                 2
-//               </div>
-//             </button>
-//           </div>
-
-//           {/* Full Menu for Larger Screens */}
-//           <div className="hidden lg:flex items-center justify-between w-full">
-//             {/* Left-aligned Logo on Large Screens */}
-//             <a href="/" className="text-xl font-bold text-gray-800 transition-transform duration-300 ease-in-out">YourLogo</a>
-
-//             <div className="flex items-center space-x-4">
-//               <a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Categories</a>
-//               <a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Company</a>
-//               <a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Stores</a>
-//             </div>
-//             <div className="flex items-center space-x-4">
-//               <button aria-label="Search" className="text-gray-700 hover:text-gray-900">
-//                 <span className="sr-only">Search</span>
-//                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-//                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35m1.4-5.65A7.75 7.75 0 1112 4.25a7.75 7.75 0 015.65 11.15z"></path>
-//                 </svg>
-//               </button>
-//               <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Cart" className="text-gray-700 hover:text-gray-900 relative">
-//                 <ShoppingCart className="h-6 w-6" />
-//                 <div className="h-3 w-3 rounded-full absolute top-[-2px] right-[-2px] bg-red-600 text-white text-[8px] flex items-center justify-center">
-//                   2
-//                 </div>
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </header>
-
-//       {/* Hamburger Menu */}
-//       {isMenuOpen && (
-//         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 lg:hidden">
-//           <div ref={menuRef} className="fixed top-0 left-0 w-64 bg-white shadow-lg p-4 h-full z-50 overflow-y-auto transform transition-transform duration-300 ease-in-out">
-//             {/* Close Button */}
-//             <button onClick={() => setIsMenuOpen(false)} aria-label="Close" className="text-gray-700 hover:text-gray-900 mb-4">
-//               <X className="h-6 w-6" />
-//             </button>
-
-//             {/* Brand Name on Top */}
-//             <div className="mb-4 text-center">
-//               <h2 className="text-xl font-semibold text-gray-900">Your Brand</h2>
-//             </div>
-//             {/* Menu Items */}
-//             <ul className="space-y-2">
-//               <li>
-//                 <button
-//                   onClick={() => handleDropdownToggle(1)}
-//                   className="text-sm text-gray-700 hover:text-gray-900 w-full flex justify-between items-center focus:outline-none"
-//                 >
-//                   Categories
-//                   <ChevronDown className={`h-4 w-4 transition-transform duration-300 ease-in-out ${activeDropdown === 1 ? 'transform rotate-180' : ''}`} />
-//                 </button>
-//                 {activeDropdown === 1 && (
-//                   <ul className="pl-4 mt-2 space-y-1 transition-all duration-300 ease-in-out">
-//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Subcategory 1</a></li>
-//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Subcategory 2</a></li>
-//                   </ul>
-//                 )}
-//               </li>
-//               <li>
-//                 <button
-//                   onClick={() => handleDropdownToggle(2)}
-//                   className="text-sm text-gray-700 hover:text-gray-900 w-full flex justify-between items-center focus:outline-none"
-//                 >
-//                   Company
-//                   <ChevronDown className={`h-4 w-4 transition-transform duration-300 ease-in-out ${activeDropdown === 2 ? 'transform rotate-180' : ''}`} />
-//                 </button>
-//                 {activeDropdown === 2 && (
-//                   <ul className="pl-4 mt-2 space-y-1 transition-all duration-500 ease-in-out">
-//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">About Us</a></li>
-//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Careers</a></li>
-//                   </ul>
-//                 )}
-//               </li>
-//               <li>
-//                 <button
-//                   onClick={() => handleDropdownToggle(3)}
-//                   className="text-sm text-gray-700 hover:text-gray-900 w-full flex justify-between items-center focus:outline-none"
-//                 >
-//                   Stores
-//                   <ChevronDown className={`h-4 w-4 transition-transform duration-300 ease-in-out ${activeDropdown === 3 ? 'transform rotate-180' : ''}`} />
-//                 </button>
-//                 {activeDropdown === 3 && (
-//                   <ul className="pl-4 mt-2 space-y-1 transition-all duration-300 ease-in-out">
-//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Store 1</a></li>
-//                     <li><a href="/categories" className="text-sm text-gray-700 hover:text-gray-900">Store 2</a></li>
-//                   </ul>
-//                 )}
-//               </li>
-//             </ul>
-//           </div>
-//         </div>
-//       )}
-//     </>
-//   );
-// };
-
-// export default Header;

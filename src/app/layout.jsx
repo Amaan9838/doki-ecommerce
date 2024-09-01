@@ -9,6 +9,7 @@ import {UpdateCartContext} from './_context/UpdateCartContext';
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { UpdateWishlistContext } from "./_context/UpdateWishlistContext";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const raleway = Raleway({ subsets: ["latin"], weight: ["100","200","300","400",'500',"600","700","800","900"], 
 
@@ -36,6 +37,7 @@ const showHeader=params=='/SignIn'||params=='/SignUp'?false:true;
       {showHeader&&<Header />}
      
         {children}<Footer/><Toaster /> </UpdateCartContext.Provider> </UpdateWishlistContext.Provider></body>
+        <GoogleAnalytics gaId="G-RERCB1HZDM" />
     </html>
     // </PayPalScriptProvider>
   );

@@ -70,7 +70,7 @@ const { toast } = useToast()
             </p>
           </div>
           <div className="mt-5">
-            <button
+            {/* <button
               type="button"
               className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
             >
@@ -102,7 +102,7 @@ const { toast } = useToast()
             </button>
             <div className="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
               Or
-            </div>
+            </div> */}
             {/* Form */}
             <>
               <div className="grid gap-y-4">

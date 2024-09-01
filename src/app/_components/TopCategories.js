@@ -27,28 +27,7 @@ export default function TopCategories() {
   </div>;
   }
 
-  const categories = [
-    {
-      name: 'Pants',
-      imageUrl: 'https://us.icon-amsterdam.com/cdn/shop/files/11T_c07a8c70-fb7d-46a2-8d65-237b1bfb8d9e.jpg?v=1723728632&width=800',
-      link: '/shop/pants',
-    },
-    {
-      name: 'Denim Jeans',
-      imageUrl: '/jeans.jpg',
-      link: '/shop/denim-jeans',
-    },
-    {
-      name: 'Shorts',
-      imageUrl: 'https://us.icon-amsterdam.com/cdn/shop/files/s_s2.jpg?v=1723979769&width=800',
-      link: '/shop/shorts',
-    },
-    {
-      name: 'Tops',
-      imageUrl: '/tshirt.jpg',
-      link: '/shop/tops',
-    },
-  ];
+
 
   return (
     <section className="bg-[#181818] py-12 px-4 md:px-24  md:mt-24 mt-16 md:mx-8 rounded-3xl">
@@ -60,7 +39,7 @@ export default function TopCategories() {
             className="relative w-64 h-80 lg:h-96 rounded-3xl overflow-hidden shadow-lg group"
           >
             <img 
-              src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL +category?.attributes?.image?.data[0]?.attributes?.url} 
+              src={category?.attributes?.image?.data[0]?.attributes?.url} 
               alt={category?.attributes?.title} 
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />

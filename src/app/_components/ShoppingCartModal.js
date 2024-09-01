@@ -86,7 +86,10 @@ useEffect(() => {
 };
 const Checkout=()=>{
   onClose()
+  if(cartItemsList.length > 0){
   router.push(jwt?'/checkout':'/SignIn')
+
+}
 }
   return (
     <div
@@ -132,7 +135,7 @@ const Checkout=()=>{
                   >
                     <>
                     <img
-                      src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+cart.image}
+                      src={cart.image}
                       alt={cart.name}
                       className="w-24 h-24 object-cover rounded-md mr-4"
                     />
@@ -141,7 +144,7 @@ const Checkout=()=>{
                       {cart.name}
                       </h3>
                       <p className="text-gray-900 font-bold mt-1">
-                        ${cart.amount}
+                        ${cart.price}
                       </p>
                     </div>
                     <div className="flex flex-col items-center ml-4">

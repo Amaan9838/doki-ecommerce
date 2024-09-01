@@ -44,10 +44,6 @@ const ProductDetailsPage = ({ product }) => {
   const [selectedColor, setSelectedColor] = useState(2);
   const [selectedSize, setSelectedSize] = useState('M');
 
-  // const { wishlistItems, addToWishlist, removeFromWishlist } = useContext(WishlistContext);
-  // console.log("this is the product detaisl:",product);
-
-  // const isWishlisted = wishlistItems.some((item) => item.id === product.id);
 
   const handleClick = () => {
     if (isWishlisted) {
@@ -70,35 +66,106 @@ const ProductDetailsPage = ({ product }) => {
   };
 
 
-  const addToCart = ()=>{
+  // const addToCart = ()=>{
+  //   setLoading(true);
+  //   if (!jwt){
+  //     router.push("/SignIn");
+  //     setLoading(false);
+  //     return;
+  //   }
+  //   const data={
+  //    data:{
+  //     products: product.id,
+  //     quantity: quantity,
+  //     amount: (quantity*totalPrice).toFixed(2),
+  //     users_permissions_users: user.id,
+  //     userId:user.id,
+  //     size: selectedSize,
+  //     color:selectedColor,
+  //    }
+  //   }
+  //   // console.log(data);
+  //   GlobalApi.addToCart(data,jwt).then(resp=>{
+  //   // console.log("this is the data",resp);
+  //   setUpdateCart(!updateCart);
+  //   setLoading(false);
+
+  //   },(e)=>{
+  //     alert("got error while add to cart");
+  //     setLoading(false);
+
+  //   }
+  // )
+  // }
+
+  const addToCart = () => {
     setLoading(true);
-    if (!jwt){
+    if (!jwt) {
       router.push("/SignIn");
       setLoading(false);
       return;
     }
-    const data={
-     data:{
-      products: product.id,
-      quantity: quantity,
-      amount: (quantity*totalPrice).toFixed(2),
-      users_permissions_users: user.id,
-      userId:user.id,
-     }
-    }
-    // console.log(data);
-    GlobalApi.addToCart(data,jwt).then(resp=>{
-    // console.log("this is the data",resp);
-    setUpdateCart(!updateCart);
-    setLoading(false);
+  
+    // Fetch existing cart items
+    GlobalApi.getCartItems(user.id,jwt).then((cartItems) => {
+      // Check if the item is already in the cart
+      console.log("this is the cart items list",cartItems);
+      const existingItem = cartItems.find(
+        (item) =>
+          item.product === product.id 
+        // &&
+        //   item.size === selectedSize &&
+        //   item.color === selectedColor
+      );
+  
+      if (existingItem) {
+        // Update the quantity of the existing item
+        const updatedQuantity = existingItem.quantity + quantity;
+        console.log("this is the order quantity:",updatedQuantity)
 
-    },(e)=>{
-      alert("got error while add to cart");
-      setLoading(false);
-
-    }
-  )
-  }
+        const data = {
+          data: {
+            quantity: updatedQuantity,
+            amount: (updatedQuantity * totalPrice).toFixed(2),
+          },
+        };
+        GlobalApi.updateCartItem(existingItem.id, data, jwt).then(
+          (resp) => {
+            setUpdateCart(updateCart);
+            setLoading(false);
+          },
+          (e) => {
+            alert("Got an error while updating the cart");
+            setLoading(false);
+          }
+        );
+      } else {
+        // Add a new item to the cart
+        const data = {
+          data: {
+            products: product.id,
+            quantity: quantity,
+            amount: (quantity * totalPrice).toFixed(2),
+            users_permissions_users: user.id,
+            userId: user.id,
+            size: selectedSize,
+            color: selectedColor,
+          },
+        };
+        GlobalApi.addToCart(data, jwt).then(
+          (resp) => {
+            setUpdateCart(!updateCart);
+            setLoading(false);
+          },
+          (e) => {
+            alert("Got an error while adding to the cart");
+            setLoading(false);
+          }
+        );
+      }
+    });
+  };
+  
 
   const addToWishList = ()=>{
     setLoading(true);
