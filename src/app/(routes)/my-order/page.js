@@ -2,12 +2,14 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
 import GlobalApi from '../../_utils/GlobalApi';
+import Loader from '@/app/_components/Loader';
 
 export default function MyOrder() {
     const router = useRouter();
     const [orderData, setOrderData] = useState([]);
     const [jwt, setJwt] = useState(null);
     const [user, setUser] = useState(null);
+const [loading, setLoading]= useState(false);
 
     useEffect(() => {
         const storedJwt = sessionStorage.getItem('jwt');
@@ -21,9 +23,12 @@ export default function MyOrder() {
 
         const getMyOrder = async (userId, jwtToken) => {
             try {
+        setLoading(true);
+
                 const orderList = await GlobalApi.getMyOrder(userId, jwtToken);
                 console.log("Fetched order list:", orderList);
                 setOrderData(orderList);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching orders:", error);
             }
@@ -45,6 +50,9 @@ export default function MyOrder() {
         }
     },[]);
 
+    // if(loading){
+        <Loader/>
+    // }
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-3xl font-bold mb-6">Order History</h1>
@@ -60,6 +68,7 @@ export default function MyOrder() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
+                       
                     {orderData.length > 0 ? (
                        
                         orderData.map((order, index) => (

@@ -110,9 +110,9 @@ export default function Checkout() {
                 />
                 <div>
                   <h3 className="text-lg font-medium">{cart.name}</h3>
-                  {/* <div className="flex">
-                    <p className="text-muted-foreground">Black / M</p>
-                  </div> */}
+                  <div className="flex">
+                    <p className="text-muted-foreground">Size: {cart.size}</p>
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="text-lg font-medium">${cart.amount}</p>
