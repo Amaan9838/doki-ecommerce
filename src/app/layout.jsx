@@ -27,11 +27,11 @@ export default function RootLayout({ children }) {
     // Create and append Weglot script
     const script = document.createElement('script');
     script.src = 'https://cdn.weglot.com/weglot.min.js';
-    script.async = true;
+    // script.async = true;
     script.onload = () => {
       if (window.Weglot) {
         window.Weglot.initialize({
-          api_key: 'wg_2f1fa935819a23ad93ff9293b0f50fb60',
+          api_key: 'wg_9259e5a808b2ae11f7bd85e75bbaf8182',
         });
       }
     };
