@@ -160,7 +160,7 @@ const GridSection = () => {
                   className="w-full h-full object-cover md:min-w-[250px]"
                 ></video>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className={`${ubuntu.variable} font-sans text-white text-3xl font-bold`}>
+                  <span className={`${ubuntu.variable} font-sans text-white text-xl lg:text-3xl font-bold`}>
                     {videoItem.attributes.title}
                   </span>
                 </div>
@@ -205,7 +205,7 @@ const AnimatedGridItem = ({ src, label }) => {
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className={` ${ubuntu.variable} font-sans text-white text-3xl font-semibold`}>{label}</span>
+        <span className={` ${ubuntu.variable} font-sans text-white text-xl lg:text-3xl lg:font-semibold font-medium`}>{label}</span>
       </div>
     </motion.div>
   );

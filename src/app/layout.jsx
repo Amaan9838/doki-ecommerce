@@ -40,7 +40,7 @@ useEffect(() => {
       });
     }
   };
-  document.body.appendChild(script);
+  document.head.appendChild(script);
 }, []);
 
   return (
@@ -51,7 +51,7 @@ useEffect(() => {
         <UpdateCartContext.Provider value={{ updateCart,setUpdateCart }}>
       {showHeader&&<Header />}
      
-        {children}<Footer/><Toaster /> </UpdateCartContext.Provider> </UpdateWishlistContext.Provider></body>
+        {children} {showHeader&&<Footer/>}<Toaster /> </UpdateCartContext.Provider> </UpdateWishlistContext.Provider></body>
         <GoogleAnalytics gaId="G-RERCB1HZDM" />
     </html>
 

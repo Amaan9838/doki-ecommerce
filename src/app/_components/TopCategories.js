@@ -46,8 +46,8 @@ export default function TopCategories() {
             <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <h3 className="text-white text-2xl font-bold mb-4">{category?.attributes?.title}</h3>
               <a 
-                href={category.link} 
-                className="bg-yellow-500 text-black px-6 py-2 rounded-full text-lg font-semibold hover:bg-yellow-600 transition-colors duration-300"
+                href={category?.attributes?.link} 
+                className="cursor-pointer bg-yellow-500 text-black px-6 py-2 rounded-full text-lg font-semibold hover:bg-yellow-600 transition-colors duration-300"
               >
                 Shop Now
               </a>

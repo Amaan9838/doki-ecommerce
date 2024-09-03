@@ -56,19 +56,19 @@ export default function Footer() {
         <div>
           <h2 className="text-lg font-bold mb-4">Customer Support</h2>
           <ul className="space-y-2 text-sm">
-            <li className="hover:text-gray-400 transition duration-300">Shipping</li>
+            {/* <li className="hover:text-gray-400 transition duration-300">Shipping</li> */}
             <li className="hover:text-gray-400 transition duration-300">Track Your Order</li>
-            <li className="hover:text-gray-400 transition duration-300">Request a return / exchange</li>
-            <li className="hover:text-gray-400 transition duration-300">Returns & Refunds</li>
+            {/* <li className="hover:text-gray-400 transition duration-300">Request a return / exchange</li>
+            <li className="hover:text-gray-400 transition duration-300">Returns & Refunds</li> */}
             <li className="hover:text-gray-400 transition duration-300">Privacy Policy</li>
             <li className="hover:text-gray-400 transition duration-300">Terms and Conditions</li>
             <li className="hover:text-gray-400 transition duration-300">About Us</li>
-            <li className="hover:text-gray-400 transition duration-300">FAQ</li>
+            {/* <li className="hover:text-gray-400 transition duration-300">FAQ</li> */}
           </ul>
         </div>
         
         {/* Join the Club Section */}
-        <div>
+        {/* <div>
           <h2 className="text-lg font-bold mb-4">JOIN THE CLUB</h2>
           <p className="text-sm mb-4">
             Get exclusive access to new product releases, special offers, and
@@ -84,7 +84,7 @@ export default function Footer() {
               →
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
       
       {/* Bottom Section */}

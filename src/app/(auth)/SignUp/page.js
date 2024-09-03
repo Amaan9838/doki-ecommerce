@@ -54,7 +54,9 @@ const { toast } = useToast()
       <div className="m-20 w-full max-w-[500px] p-4 sm:p-14 bg-white border border-gray-200 rounded-3xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
         <>
           <div className="text-center">
-      <div className="flex items-center justify-center">  <Image unoptimized={true} src={'/brand_logo_large.png'} width={200} height={150} className="pb-4"/>
+      <div className="flex items-center justify-center">
+        <a href="/">
+          <Image unoptimized={true} src={'/brand_logo_large.png'} width={200} height={150} className="pb-4"/></a>
       </div>
             <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
               Sign up
