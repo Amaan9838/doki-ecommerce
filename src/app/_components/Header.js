@@ -270,12 +270,12 @@ GlobalApi.deleteCartItems(id,jwt).then(resp=>{
 
                     <ul className="space-y-2 h-[300px] overflow-y-scroll">
                       {searchResults.map((product, index) => (
-                         <a href={`/products/${product.id}/${generateSlug(product.attributes.title)}`}>
+                         <a key={index} href={`/products/${product.id}/${generateSlug(product.attributes.title)}`}>
                 
-                <li key={index} className="flex justify-between items-center p-2 border border-gray-200 rounded hover:bg-gray-100">
+                <li  className="flex justify-between items-center p-2 border border-gray-200 rounded hover:bg-gray-100">
                           <div className="flex items-center">
                             {product.attributes.images.data.slice(0,1).map((image,index)=> (
-                            <img src={image.attributes.url} alt={product.attributes.title} className="w-12 h-12 object-cover rounded mr-4" />
+                            <img key={index} src={image.attributes.url} alt={product.attributes.title} className="w-12 h-12 object-cover rounded mr-4" />
 
                             ))}
                             <span>{product.attributes.title}</span>
