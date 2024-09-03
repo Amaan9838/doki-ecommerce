@@ -45,7 +45,18 @@ useEffect(() => {
 
   return (
     <html lang="en">
-      
+   <head>
+   <link rel="alternate" hreflang="en" href="https://dokicollections.com" />
+        <link rel="alternate" hreflang="nl" href="https://nl.dokicollections.com" />
+        <script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            Weglot.initialize({
+              api_key: 'wg_f9e9d8e20c1e0ba7ed572dfd5880ef920'
+            });
+          `
+        }} />
+    </head>   
       <body className={raleway.className}>         <UpdateWishlistContext.Provider value={{ updateWishlist,setUpdateWishlist }}>
 
         <UpdateCartContext.Provider value={{ updateCart,setUpdateCart }}>

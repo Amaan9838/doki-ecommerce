@@ -1,4 +1,5 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
 import GlobalApi from '../../_utils/GlobalApi';
@@ -9,12 +10,11 @@ export default function MyOrder() {
     const [orderData, setOrderData] = useState([]);
     const [jwt, setJwt] = useState(null);
     const [user, setUser] = useState(null);
-const [loading, setLoading]= useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const storedJwt = sessionStorage.getItem('jwt');
-      const storedUser = JSON.parse(sessionStorage.getItem('user'));
-
+        const storedUser = JSON.parse(sessionStorage.getItem('user'));
 
         if (!storedJwt) {
             router.replace('/');
@@ -23,20 +23,20 @@ const [loading, setLoading]= useState(false);
 
         const getMyOrder = async (userId, jwtToken) => {
             try {
-        setLoading(true);
-
+                setLoading(true);
                 const orderList = await GlobalApi.getMyOrder(userId, jwtToken);
                 console.log("Fetched order list:", orderList);
                 setOrderData(orderList);
-                setLoading(false);
             } catch (error) {
                 console.error("Error fetching orders:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
         getMyOrder(storedUser.id, storedJwt);
     }, [router]);
-    console.log("this is the order data:", orderData)
+
     const getStatusColor = useCallback((status) => {
         switch (status) {
             case 'pending':
@@ -48,9 +48,12 @@ const [loading, setLoading]= useState(false);
             default:
                 return 'bg-gray-100 text-gray-800';
         }
-    },[]);
+    }, []);
 
-  
+    if (loading) {
+        return <Loader />;
+    }
+
     return (
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-3xl font-bold mb-6">Order History</h1>
@@ -66,55 +69,50 @@ const [loading, setLoading]= useState(false);
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                       
-                    {orderData.length > 0 ? (
-                       
-                        orderData.map((order, index) => (
-                            <tr key={order.id}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {new Date(order.createdAt).toLocaleDateString()}
-                                    {/* ${order.totalOrderAmount.toFixed(2)} */}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <div className="space-y-2">
-                                        {order.orderItemList.map((item, index) => (
-                                            <div key={index} className="flex items-center space-x-4">
-                                                <img
-                                                    src={item.product.data.attributes.images.data[0].attributes.url}
-                                                    alt={item.product.data.attributes.title}
-                                                    className="w-16 h-16 object-cover rounded"
-                                                />
-                                                <div>
-                                                    <p className="font-medium">{item.product.data.attributes.title}</p>
-                                                    <p className="text-sm text-gray-500">${item.product.data.attributes.price.toFixed(2)}</p>
+                        {orderData.length > 0 ? (
+                            orderData.map((order, index) => (
+                                <tr key={order.id}>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {new Date(order.createdAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="space-y-2">
+                                            {order.orderItemList.map((item, index) => (
+                                                <div key={index} className="flex items-center space-x-4">
+                                                    <img
+                                                        src={item.product.data.attributes.images.data[0].attributes.url}
+                                                        alt={item.product.data.attributes.title}
+                                                        className="w-16 h-16 object-cover rounded"
+                                                    />
+                                                    <div>
+                                                        <p className="font-medium">{item.product.data.attributes.title}</p>
+                                                        <p className="text-sm text-gray-500">${item.product.data.attributes.price.toFixed(2)}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {order.orderItemList.map((item, index) => (
-                                           item.quantity
-                                        ))}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    ${order.totalOrderAmount.toFixed(2)}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                                        {order.status}
-                                    </span>
-                                </td>
-                            </tr>
-                        ))) : (
+                                            ))}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {order.orderItemList.map((item) => item.quantity)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        ${order.totalOrderAmount.toFixed(2)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                                            {order.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
                             <tr>
-                                <td colSpan="4" className="px-6 py-4 text-center text-gray-500">
+                                <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
                                     No orders found
                                 </td>
                             </tr>
                         )}
                     </tbody>
-
                 </table>
             </div>
         </div>
