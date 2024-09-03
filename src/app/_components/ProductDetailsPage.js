@@ -82,11 +82,8 @@ const ProductDetailsPage = ({ product }) => {
   const reviews = product.attributes.reviews.data;
   const totalRating = reviews.reduce((sum, review) => sum + review.attributes.ratingValue, 0);
 
-  // Calculate the average rating
-  // const averageRatings = reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0;
   const [averageRating, setAverageRating] = useState(reviews.length > 0 ? (totalRating / reviews.length).toFixed(1) : 0);
   // setAverageRating(averageRatings);
-  console.log("Average Rating:", averageRating);
 
 
   
