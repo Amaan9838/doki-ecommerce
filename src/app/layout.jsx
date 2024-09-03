@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
     script.onload = () => {
       if (window.Weglot) {
         window.Weglot.initialize({
-          api_key: 'wg_9259e5a808b2ae11f7bd85e75bbaf8182',
+          api_key: 'wg_0eff2eee944bce8e60cfc91cfc0a828e5',
         });
       }
     };
