@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { UpdateWishlistContext } from "./_context/UpdateWishlistContext";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import Head from 'next/head';
 
 const raleway = Raleway({ subsets: ["latin"], weight: ["100","200","300","400",'500',"600","700","800","900"], 
 
@@ -30,6 +31,18 @@ const showHeader=params=='/SignIn'||params=='/SignUp'?false:true;
 
   return (
     <html lang="en">
+      <Head>
+      <script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
+      <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              Weglot.initialize({
+                api_key: 'wg_5cda79fc8ba1f8a162111ab6e986de326'
+              });
+            `,
+          }}
+        />
+      </Head>
       <body className={raleway.className}>         <UpdateWishlistContext.Provider value={{ updateWishlist,setUpdateWishlist }}>
 
         <UpdateCartContext.Provider value={{ updateCart,setUpdateCart }}>

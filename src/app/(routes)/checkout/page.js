@@ -19,54 +19,55 @@ export default function Checkout() {
   const [cartItemsList, setCartItemsList] = useState([]);
   const [totalCartItems, setTotalCartItems] = useState(0);
   const [subTotal, setSubTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const [totalAmount, setTotalAmount] = useState(null);
   const shippingFee = 5.00;
 
   useEffect(() => {
- 
     if (typeof window !== 'undefined') {
       const storedJwt = sessionStorage.getItem('jwt');
       const storedUser = JSON.parse(sessionStorage.getItem('user'));
-      console.log("JWT:", storedJwt);
-      console.log("User:", storedUser);
+
       if (storedJwt) {
         setJwt(storedJwt);
         setUser(storedUser);
         getCartItems(storedUser.id, storedJwt);
-      }else if(!storedJwt){
-      router.push('/SignIn'); 
+      } else {
+        router.push('/SignIn');
       }
     }
-  
   }, []);
 
   useEffect(() => {
-    if (cartItemsList.length > 0) {
+    if (!loading && cartItemsList.length === 0) {
+      router.push('/');  // Redirect to cart page if no items
+    } else if (cartItemsList.length > 0) {
       let total = 0;
       cartItemsList.forEach(element => {
-        total += element.amount * element.quantity;
+        total += element.price * element.quantity;
       });
       const calculatedSubTotal = parseFloat(total.toFixed(2));
       setSubTotal(calculatedSubTotal);
       setTotalAmount((calculatedSubTotal + shippingFee).toFixed(2));
     }
-    // else{
-    //    router.push('/'); 
-    // }
-  }, [cartItemsList]);
+  }, [cartItemsList, loading]);
 
   const getCartItems = async (userId, jwtToken) => {
     setLoading(true);
-    const cartItemsList_ = await GlobalApi.getCartItems(userId, jwtToken);
-    setTotalCartItems(cartItemsList_.length);
-    setCartItemsList(cartItemsList_);
-    setLoading(false);
+    try {
+      const cartItemsList_ = await GlobalApi.getCartItems(userId, jwtToken);
+      setTotalCartItems(cartItemsList_.length);
+      setCartItemsList(cartItemsList_);
+    } catch (error) {
+      console.error("Failed to fetch cart items", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if(loading){
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />
@@ -79,21 +80,21 @@ export default function Checkout() {
       <main className="flex-1 grid md:grid-cols-2 gap-8 p-6 md:p-12">
         <div className="bg-background rounded-lg shadow-lg p-6 md:p-8">
           <h2 className="text-2xl font-bold mb-6">Delivery</h2>
-            <div className="mt-6">
-              <h2 className="text-2xl font-bold mb-6">Payment</h2>
-              {totalAmount !== null && (
-                <Elements
-                  stripe={stripePromise}
-                  options={{
-                    mode: "payment",
-                    amount: convertToSubcurrency(totalAmount),
-                    currency: "usd",
-                  }}
-                >
-                  <CheckoutPage amount={totalAmount} cartItemsList={cartItemsList}/>
-                </Elements>
-              )}
-            </div>
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold mb-6">Payment</h2>
+            {totalAmount !== null && (
+              <Elements
+                stripe={stripePromise}
+                options={{
+                  mode: "payment",
+                  amount: convertToSubcurrency(totalAmount),
+                  currency: "usd",
+                }}
+              >
+                <CheckoutPage amount={totalAmount} cartItemsList={cartItemsList} />
+              </Elements>
+            )}
+          </div>
         </div>
         <div className="bg-background rounded-lg shadow-lg p-6 md:p-8">
           <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
@@ -115,7 +116,7 @@ export default function Checkout() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-medium">${cart.amount}</p>
+                  <p className="text-lg font-medium">${cart.price}</p>
                   <p className="text-muted-foreground">Qty: {cart.quantity}</p>
                 </div>
               </div>
