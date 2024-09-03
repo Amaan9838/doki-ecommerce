@@ -33,7 +33,7 @@ const showHeader=params=='/SignIn'||params=='/SignUp'?false:true;
 
   return (
     <html lang="en">
-   <head>
+   {/* <head>
    <link rel="alternate" hreflang="en" href="https://dokicollections.com" />
         <link rel="alternate" hreflang="nl" href="https://nl.dokicollections.com" />
         <script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
@@ -44,7 +44,7 @@ const showHeader=params=='/SignIn'||params=='/SignUp'?false:true;
             });
           `
         }} />
-    </head>   
+    </head>    */}
       <body className={raleway.className}>         <UpdateWishlistContext.Provider value={{ updateWishlist,setUpdateWishlist }}>
 
         <UpdateCartContext.Provider value={{ updateCart,setUpdateCart }}>
