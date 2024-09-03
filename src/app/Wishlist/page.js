@@ -27,7 +27,7 @@ export default function Wishlist() {
     }
   }, []);
 
-  const getWishlistItems = () => {
+  const getWishlistItems =()=> {
     if (!jwt || !user) return;
     
     setLoading(true);

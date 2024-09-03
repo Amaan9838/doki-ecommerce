@@ -68,7 +68,23 @@
     background-color: #F8F7F4;
   }
 }
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar (for horizontal scrollbars) */
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Color of the scrollbar track */
+  border-radius: 10px; /* Optional: rounded corners */
+}
+
+/* Handle (thumb) */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Optional: rounded corners */
+  border: 3px solid #f0f0f0; /* Optional: space around the thumb */
+}
 /* From Uiverse.io by abrahamcalsin */ 
 .dot-spinner {
   --uib-size: 2.8rem;

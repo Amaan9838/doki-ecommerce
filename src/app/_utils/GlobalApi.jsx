@@ -47,14 +47,15 @@ username,
         });
 const addToCart = (data,jwt)=>axiosClient.post('/user-carts',data,{
     headers:{
+        "Content-Type": "application/json",
         Authorization:'Bearer '+jwt
        }
 })
 
 const addToWishList = (data,jwt)=>axiosClient.post('/user-wishlists',data,{
     headers:{
-        Authorization:'Bearer '+jwt
-       }
+        Authorization:'Bearer '+jwt,
+       },
 })
 
 const postReviews = (data,jwt)=>axiosClient.post('/reviews',data,{
@@ -63,6 +64,10 @@ const postReviews = (data,jwt)=>axiosClient.post('/reviews',data,{
        }
 }
 )
+
+const getReviews = (itemId)=>axiosClient.get(`/reviews?filters[related_item][id]=${itemId}`).then(resp=>{
+    return resp.data.data;
+})
 
 const getCartItems=(userId,jwt)=>axiosClient.get('/user-carts?filters[userId][$eq]='+userId+'&[populate][products][populate][images][populate][0]=url',
     {
@@ -79,10 +84,13 @@ const getCartItems=(userId,jwt)=>axiosClient.get('/user-carts?filters[userId][$e
          actualPrice:item.attributes.products?.data[0].attributes.price,
          id:item.id,
          product:item?.attributes.products?.data[0].id,
-         price:item.attributes.amount,
+         price:item.attributes.products?.data[0].attributes.discount != null ? (item.attributes.products?.data[0].attributes.price * (1 - item.attributes.products?.data[0].attributes.discount / 100)).toFixed(2) : item.attributes.products?.data[0].attributes.price,
+         size:item.attributes.size,
+         
         }))
         return cartItemsList
     })
+    const SearchItems=(query)=>axiosClient.get('/products?populate=images&filters[title][$containsi]='+query);
     
     const createPaymentIntent=(amount)=>axiosClientNew.post('/create-payment-intent',amount,{
         headers: {
@@ -179,4 +187,6 @@ export default {
     createOrder,
     createPaymentIntent,
     getMyOrder,
+    SearchItems,
+    getReviews
 };

@@ -9,6 +9,7 @@ import GlobalApi from '../_utils/GlobalApi.jsx';
 import { UpdateCartContext } from '../_context/UpdateCartContext';
 import { UpdateWishlistContext } from '../_context/UpdateWishlistContext';
 import { toast } from '@/components/ui/use-toast';
+import { generateSlug } from '../_utils/slug';
 
 const Header = () => {
   
@@ -22,7 +23,8 @@ const Header = () => {
 //   const jwt = sessionStorage.getItem('jwt');
 // const user = JSON.parse(sessionStorage.getItem('user'));
   const [isOpenSearch, setIsOpenSearch] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]); 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const {updateCart,setUpdateCart}=useContext(UpdateCartContext);
   const {updateWishlist,setUpdateWishlist}=useContext(UpdateWishlistContext);
@@ -78,6 +80,23 @@ setCategoryList(resp.data.data);
     // setCartItemsList(cartItemsList_);
   }
   
+  const fetchProducts = async (query) => {
+    if (query) {
+      const response = await GlobalApi.SearchItems(query); // Assuming you have a searchProducts method in GlobalApi
+      setSearchResults(response.data.data); // Store the results in state
+      // console.log("this is the search:",searchResults.data)
+    } else {
+      setSearchResults([]); // Clear results if search term is empty
+    }
+  }
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchProducts(searchTerm);
+    }, 300); // Debounce search input by 300ms
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+  
 const MenuClose =()=>{
 setisMenuClose(true);
 setIsMenuOpen(false);
@@ -85,10 +104,10 @@ setIsMenuOpen(false);
 const onDeleteItem=(id)=>{
 GlobalApi.deleteCartItems(id,jwt).then(resp=>{
   toast({title: "Item removed !"})
-  getCartItems();
+  getCartItems(user.id,jwt);
   gtag("event", "remove_from_cart", {
     currency: "USD",
-    value: subTotal.toFixed(2),
+    value: cartItemsList.amount,
     items: [
       {
         item_id: `SKU_${cartItemsList.id}`,
@@ -245,23 +264,35 @@ GlobalApi.deleteCartItems(id,jwt).then(resp=>{
     onChange={(e) => setSearchTerm(e.target.value)}
   />
   
+ 
   <div className="absolute bottom-0 left-0 h-0.5 w-full bg-black scale-x-0 transition-transform ease-in-out duration-300"></div>
 </div>
 
-                    <ul className="space-y-2">
-                      {filteredProducts.map((product, index) => (
-                        <li key={index} className="flex justify-between items-center p-2 border border-gray-200 rounded hover:bg-gray-100">
+                    <ul className="space-y-2 h-[300px] overflow-y-scroll">
+                      {searchResults.map((product, index) => (
+                         <a href={`/products/${product.id}/${generateSlug(product.attributes.title)}`}>
+                
+                <li key={index} className="flex justify-between items-center p-2 border border-gray-200 rounded hover:bg-gray-100">
                           <div className="flex items-center">
-                            <img src={product.img} alt={product.name} className="w-12 h-12 object-cover rounded mr-4" />
-                            <span>{product.name}</span>
+                            {product.attributes.images.data.slice(0,1).map((image,index)=> (
+                            <img src={image.attributes.url} alt={product.attributes.title} className="w-12 h-12 object-cover rounded mr-4" />
+
+                            ))}
+                            <span>{product.attributes.title}</span>
                           </div>
                           <div className="text-right">
-                            {product.originalPrice && (
-                              <span className="text-gray-400 line-through mr-2">${product.originalPrice}</span>
-                            )}
-                            <span className="text-red-500">${product.price}</span>
+                            {product.attributes.discount !=null ? (
+                              <div className='flex flex-col justify-center items-center'>
+                              <span className="text-gray-400 text-xs line-through mr-2">${product.attributes.price}</span>
+                              <span className="text-red-500 font-semibold">${(product.attributes.price * (1 - product.attributes.discount / 100)).toFixed(2)}</span>
+                              </div>
+                           ) :
+                           <span className="text-gray-900 font-semibold mr-2">${product.attributes.price}</span>
+                          }
                           </div>
+                          
                         </li>
+                        </a>
                       ))}
                     </ul>
                     </div>
@@ -384,7 +415,7 @@ GlobalApi.deleteCartItems(id,jwt).then(resp=>{
             <Menu className="h-6" />
             <span className="text-xs">Categories</span>
           </button>
-          <Link href={'/SignIn'} aria-label="Account" className="text-gray-700 flex flex-col items-center">
+          <Link href={`${!isLogin ?'/SignIn': '/profile'}`} aria-label="Account" className="text-gray-700 flex flex-col items-center">
             <User2Icon className="h-6" />
             <span className="text-xs">Account</span>
           </Link>

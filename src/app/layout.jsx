@@ -29,7 +29,6 @@ const [updateWishlist,setUpdateWishlist]=useState(false);
 const showHeader=params=='/SignIn'||params=='/SignUp'?false:true; 
 
   return (
-    // <PayPalScriptProvider options={{ clientId: "test" }}>
     <html lang="en">
       <body className={raleway.className}>         <UpdateWishlistContext.Provider value={{ updateWishlist,setUpdateWishlist }}>
 
@@ -39,6 +38,6 @@ const showHeader=params=='/SignIn'||params=='/SignUp'?false:true;
         {children}<Footer/><Toaster /> </UpdateCartContext.Provider> </UpdateWishlistContext.Provider></body>
         <GoogleAnalytics gaId="G-RERCB1HZDM" />
     </html>
-    // </PayPalScriptProvider>
+
   );
 }
