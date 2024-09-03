@@ -29,19 +29,7 @@ const [updateWishlist,setUpdateWishlist]=useState(false);
 
 const showHeader=params=='/SignIn'||params=='/SignUp'?false:true; 
 
-useEffect(() => {
-  const script = document.createElement('script');
-  script.src = "https://cdn.weglot.com/weglot.min.js";
-  script.async = true;
-  script.onload = () => {
-    if (window.Weglot) {
-      window.Weglot.initialize({
-        api_key: 'wg_5cda79fc8ba1f8a162111ab6e986de326'
-      });
-    }
-  };
-  document.head.appendChild(script);
-}, []);
+
 
   return (
     <html lang="en">
