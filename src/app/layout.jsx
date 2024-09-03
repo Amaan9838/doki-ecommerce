@@ -7,10 +7,10 @@ import Footer from './_components/Footer';
 import Header from './_components/Header';
 import {UpdateCartContext} from './_context/UpdateCartContext';
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UpdateWishlistContext } from "./_context/UpdateWishlistContext";
 import { GoogleAnalytics } from '@next/third-parties/google'
-import Head from 'next/head';
+
 
 const raleway = Raleway({ subsets: ["latin"], weight: ["100","200","300","400",'500',"600","700","800","900"], 
 
@@ -29,16 +29,23 @@ const [updateWishlist,setUpdateWishlist]=useState(false);
 
 const showHeader=params=='/SignIn'||params=='/SignUp'?false:true; 
 
+useEffect(() => {
+  const script = document.createElement('script');
+  script.src = "https://cdn.weglot.com/weglot.min.js";
+  script.async = true;
+  script.onload = () => {
+    if (window.Weglot) {
+      window.Weglot.initialize({
+        api_key: 'wg_5cda79fc8ba1f8a162111ab6e986de326'
+      });
+    }
+  };
+  document.body.appendChild(script);
+}, []);
+
   return (
     <html lang="en">
-      <Head>
-      <script type="text/javascript" src="https://cdn.weglot.com/weglot.min.js"></script>
-<script>
- {   Weglot.initialize({
-        api_key: 'wg_5cda79fc8ba1f8a162111ab6e986de326'
-    }) }
-</script>
-      </Head>
+      
       <body className={raleway.className}>         <UpdateWishlistContext.Provider value={{ updateWishlist,setUpdateWishlist }}>
 
         <UpdateCartContext.Provider value={{ updateCart,setUpdateCart }}>

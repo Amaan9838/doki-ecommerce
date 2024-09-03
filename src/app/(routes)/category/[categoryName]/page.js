@@ -55,13 +55,13 @@ export default async function ProductCategory({params}) {
               </span>
             )}
           </div>
-          <div className="flex items-center mb-1">
+          {/* <div className="flex items-center mb-1">
             <span className="text-green-600 mr-1">★</span>
             <span className="text-sm text-gray-600">{product.reviews.data[0].attributes.ratingValue} review</span>
-          </div>
+          </div> */}
           <div className="absolute top-[12%] right-3 sm:right-6 transform -translate-y-1/2 flex flex-col gap-2 opacity-100 transition-opacity duration-300 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100">
             <button className="w-[28px] h-[28px]  flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md">
-              <Heart className=" h-4 md:h-5 text-gray-400" />
+              <Heart className=" h-4 md:h-5 text-gray-700" />
             </button>
             <button className="w-[28px] h-[28px] flex items-center justify-center md:w-[40px] md:h-[40px] bg-white rounded-full shadow-md">
               <ShoppingCart className="text-gray-700 h-4 md:h-5" />
