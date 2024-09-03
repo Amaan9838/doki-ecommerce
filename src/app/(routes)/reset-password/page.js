@@ -1,11 +1,12 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const ResetPassword = () => {
   const router = useRouter();
-  const { query } = router;
+  const searchParams = useSearchParams()
+  const query  = searchParams.get('code');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [message, setMessage] = useState('');
@@ -20,14 +21,15 @@ const ResetPassword = () => {
     }
 
     try {
+        console.log("this is the code",query);
       await axios.post('http://localhost:1337/api/auth/reset-password', {
-        code: query.code, // Code from the reset password link
+        code: query, // Code from the reset password link
         password,
         passwordConfirmation,
       });
       setMessage('Your password has been reset successfully.');
       setError('');
-      router.push('/login'); // Redirect to login page
+      router.push('/SignIn'); // Redirect to login page
     } catch (error) {
       setMessage('');
       setError('An error occurred. Please try again.');
@@ -35,7 +37,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
+    <div className='m-[250px]'>
       <h2>Reset Password</h2>
       <form onSubmit={handleResetPassword}>
         <input
