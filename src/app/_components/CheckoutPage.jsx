@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import axios from "axios";
 import {
   useStripe,
@@ -12,6 +12,7 @@ import GlobalApi from "../_utils/GlobalApi";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { initGA, logEvent } from "@/lib/analytics"; 
+import { UpdateCartContext } from "../_context/UpdateCartContext";
 
 const CheckoutPage = ({ amount, cartItemsList }) => {
   const stripe = useStripe();
@@ -23,6 +24,7 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const jwt = sessionStorage.getItem("jwt");
   const router = useRouter();
+  const {updateCart,setUpdateCart}=useContext(UpdateCartContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -147,6 +149,7 @@ const CheckoutPage = ({ amount, cartItemsList }) => {
       cartItemsList.forEach((item,index) => {
         GlobalApi.deleteCartItems(item.id, jwt).then(resp=>{
         })
+        setUpdateCart(!updateCart);
         toast({title:'Payment Successful'})
       })
       router.push('/order-confirmation')

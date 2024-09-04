@@ -89,7 +89,7 @@ useEffect(() => {
                 // Optionally, refetch the cart items or just update the subtotal locally
                 const updatedSubTotal = cartItemsList.reduce((total, item) => {
                     const quantity = item.id === id ? newQuantity : item.quantity;
-                    return total + item.amount * quantity;
+                    return total + item.price * quantity;
                 }, 0);
                 setSubTotal(updatedSubTotal);
             })
