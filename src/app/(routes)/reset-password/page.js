@@ -22,7 +22,7 @@ const ResetPasswordForm = () => {
     }
 
     try {
-      await axios.post(`http://${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/reset-password`, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/reset-password`, {
         code: query, // Code from the reset password link
         password,
         passwordConfirmation,

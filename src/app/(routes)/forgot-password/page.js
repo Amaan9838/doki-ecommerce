@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      await axios.post(`https://${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/forgot-password`, { email });
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/auth/forgot-password`, { email });
       setMessage('An email has been sent with instructions to reset your password.');
       setError('');
     } catch (error) {
