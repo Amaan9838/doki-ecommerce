@@ -1,11 +1,11 @@
 'use client';
-import GlobalApi from "@/app/_utils/GlobalApi";
+import GlobalApi from "../../_utils/GlobalApi";
 import { useEffect, useState } from "react";
-import CheckoutPage from "@/app/_components/CheckoutPage.jsx";
-import convertToSubcurrency from "@/lib/convertToSubcurrency";
+import CheckoutPage from "../../_components/CheckoutPage";
+import convertToSubcurrency from "../../../../lib/convertToSubcurrency";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import Loader from "@/app/_components/Loader";
+import Loader from "../../_components/Loader";
 import { useRouter } from "next/navigation";
 
 if (process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY === undefined) {

@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
 import GlobalApi from '../../_utils/GlobalApi';
-import Loader from '@/app/_components/Loader';
+import Loader from '../../_components/Loader';
 
 export default function MyOrder() {
     const router = useRouter();
