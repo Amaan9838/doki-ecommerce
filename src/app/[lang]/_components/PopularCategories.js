@@ -4,7 +4,7 @@ import PopularCategoriesClient from './PopularCategoriesClient'; // The client c
 
 const PopularCategories = async ({ lang }) => {
   const dict = await getDictionary(lang);
-console.log("this is the lang:", lang)
+// console.log("this is the lang:", lang)
   return <PopularCategoriesClient dict={dict} lang={lang} />;
 };
 

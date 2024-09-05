@@ -17,14 +17,14 @@ export default function Slideshow({dict, lang}) {
   const [hero, setHero] = useState([]);
   useEffect(()=>{
     getProductList();
-    console.log("this is the language:",lang)
+    // console.log("this is the language:",lang)
   },[]) 
   
     const getProductList = ()=>{
     GlobalApi.getHeroSections(lang).then(resp=>{
       const filteredData = resp.data.data.filter(item => item.attributes.section === 1);
-      console.log("this is the category data:",resp)
-      console.log("Filtered CategoryList Resp:", filteredData);
+      // console.log("this is the category data:",resp)
+      // console.log("Filtered CategoryList Resp:", filteredData);
       const sortedHero = filteredData.sort((a, b) => (a.attributes.type === 'video' ? -1 : 1));
 
       setHero(sortedHero);

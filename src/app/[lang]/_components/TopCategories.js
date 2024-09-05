@@ -15,7 +15,7 @@ export default function TopCategories({dict, lang}) {
   const getProductList = () => {
     GlobalApi.getHeroSections(lang).then(resp => {
       const filteredData = resp.data.data.filter(item => item.attributes.section === 5);
-      console.log("Filtered CategoryList Resp:", filteredData);
+      // console.log("Filtered CategoryList Resp:", filteredData);
       setHero(filteredData);
       setLoading(false);
     });

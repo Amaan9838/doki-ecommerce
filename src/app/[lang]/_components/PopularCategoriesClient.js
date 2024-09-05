@@ -23,7 +23,7 @@ const PopularCategoriesClient = ({dict, lang}) => {
   const getProductList = () => {
     GlobalApi.getHeroSections(lang).then(resp => {
       const filteredData = resp.data.data.filter(item => item.attributes.section === 3);
-      console.log("Filtered CategoryList Resp:", lang);
+    //   console.log("Filtered CategoryList Resp:", lang);
       setHero(filteredData);
       setLoading(false);
     });

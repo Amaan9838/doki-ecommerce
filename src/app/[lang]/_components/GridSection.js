@@ -26,7 +26,7 @@ const GridSection = (lang) => {
       setVideoItem(video);
 
       setHero(filteredData);
-      console.log("grid filtered data:", filteredData)
+      // console.log("grid filtered data:", filteredData)
     });
   }
   return (
