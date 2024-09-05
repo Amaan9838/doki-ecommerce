@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/page.js", "src/app/layout.jsx", "src/app/payment-success/page.jsx", "src/app/api/create-payment-intent/route.js", "src/app/_components/CheckoutPage.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/[locale]/page.js", "src/app/[locale]/layout.jsx", "src/app/payment-success/page.jsx", "src/app/api/create-payment-intent/route.js", "src/app/_components/CheckoutPage.jsx", "src/i18n/routing.js", "src/app/[lang]/_components/main-layout.jsx"],
   "exclude": ["node_modules"]
 }

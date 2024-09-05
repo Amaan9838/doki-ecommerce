@@ -1,0 +1,42 @@
+{
+    "products": {
+      "title": "Aanbevolen collecties",
+      "sub_title": "Onze bestverkochte producten"
+    },
+    "new_season": "Nieuw seizoen",
+    "shop_now": "Nu winkelen",
+    "category": "Categorie",
+    "about": "Over",
+    "contact": "Contact",
+    "limited_offer": "Tijdelijk aanbod",
+    "currency": "€",
+    "most_popular": "Meest populaire categorieën",
+    "Feature_title1":"Gratis verzending",
+    "Feature_description1": "Gratis verzending voor bestellingen boven €150",
+    "Feature_title2":"Flexibele betaling",
+    "Feature_description2": "Meerdere veilige betalingsopties",
+    "Feature_title3":"24x7 ondersteuning",
+    "Feature_description3": "We bieden online ondersteuning, de hele dag.",
+
+    "Hear_customer": "Hoor van onze klanten",
+    "customer_descript": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et est hendrerit, porta nunc vitae, gravida justo. Nunc fermentum magna lorem, euismod volutpat arcu volutpat et.",
+
+    "about_us": "Over ons",
+    "footer_content1": "DOKI is opgericht in 2024 en heeft als doel om uniek te blijven en zich te onderscheiden van de massa.",
+    "footer_content2": "DOKI is inmiddels onderdeel van de Amerikaanse streetwearscene en een toonaangevende wereldwijde bestemming voor de nieuwste herenmode.",
+
+    "follow_shop": "Volg op Shop",
+    "shop": "Shop",
+
+    "c_support": "Klantenservice",
+    "t_order":"Volg uw bestelling",
+    "p_policy":"Privacybeleid",
+    "t_conditions": "Algemene voorwaarden",
+    "header_search": "Waar bent u naar op zoek?",
+    "side_n_category": "Shop op categorie",
+    "bottom_n_wish": "Wenslijst",
+    "bottom_search": "Zoeken",
+    "bottom_account": "Account",
+    "home": "Thuis"
+  }
+  

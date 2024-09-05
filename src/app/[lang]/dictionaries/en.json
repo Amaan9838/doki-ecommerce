@@ -1,0 +1,44 @@
+{
+    "products": {
+      "title": "Featured Collections",
+      "sub_title": "Our Top Seller Products"
+    },
+    "new_season": "New Season",
+    "shop_now": "Shop Now",
+    "category": "Categories",
+    "about": "About",
+    "contact": "Contact",
+    "limited_offer": "Limited Time Offer",
+    "currency": "$",
+    "most_popular": "Most Popular Categories",
+    "Feature_title1":"Free Shipping",
+    "Feature_description1": "Free shipping for orders above $180",
+    "Feature_title2":"Flexible Payment",
+    "Feature_description2": "Multiple secure payment options",
+    "Feature_title3":"24x7 Support",
+    "Feature_description3": "We support online all days.",
+    
+    "Hear_customer": "Hear from our customers",
+    "customer_descript": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et est hendrerit, porta nunc vitae, gravida justo. Nunc fermentum magna lorem, euismod volutpat arcu volutpat et.",
+
+    "about_us": "About Us",
+    "footer_content1": "Established in 2024, DOKI is all about standing out from the crowd and staying unique.",
+    "footer_content2": "DOKI is now part of the American streetwear scene and a leading global destination for the latest menswear.",
+
+    "follow_shop": "Follow on Shop",
+     "shop": "Shop",
+
+     "c_support": "Customer Support",
+     "t_order":"Track Your Order",
+     "p_policy":"Privacy Policy",
+     "t_conditions": "Terms and Conditions",
+      "header_search": "What are you looking for?",
+      "side_n_category": "Shop by Category",
+      "bottom_n_wish": "Wishlist",
+      "bottom_search": "Search",
+      "bottom_account": "Account",
+       "home": "Home"
+
+    
+  }
+  
