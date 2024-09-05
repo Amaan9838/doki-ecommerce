@@ -1,13 +1,6 @@
 // 'use client';
 import { Raleway } from 'next/font/google';
 import './globals.css';
-// import { Toaster } from '@/components/ui/toaster';
-// import Footer from  '@/app/_components/Footer';
-// import Header from '@/app/_components/Header';
-// import { UpdateCartContext } from '@/app/_context/UpdateCartContext';
-// import { usePathname } from 'next/navigation';
-// import { useState } from 'react';
-// import { UpdateWishlistContext } from '@/app/_context/UpdateWishlistContext';
 import { getDictionary } from "./dictionaries";
 import MainLayout from "./_components/main-layout";
 import { GoogleAnalytics } from '@next/third-parties/google';

@@ -71,10 +71,9 @@ const GridSection = (lang) => {
         {/* Top Right */}
         <div
           className='relative flex md:flex-col flex-row gap-4'
-     
         >
         
-        {hero.slice(3, 5).map((item,index)=>(
+        {hero.slice(2, 4).map((item,index)=>(
           <AnimatedGridItem key={index} src={item?.attributes?.image?.data[0]?.attributes?.url} label={item.attributes.title} />
   ))
         }

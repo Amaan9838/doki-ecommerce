@@ -16,7 +16,7 @@ export default async function Home({ params: { lang } }) {
   const categoryList=await GlobalApi.getCategoryList(lang);
   const productList=await GlobalApi.getProductList(lang);
   const dict = await getDictionary(lang);
-console.log("lang:",lang);
+// console.log("lang:",lang);
   return (
     <>
        
